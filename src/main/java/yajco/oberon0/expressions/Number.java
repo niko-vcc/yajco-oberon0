@@ -1,4 +1,4 @@
-package yajco.oberon0;
+package yajco.oberon0.expressions;
 
 import yajco.annotation.Token;
 

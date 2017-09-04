@@ -2,6 +2,7 @@ package yajco.oberon0;
 
 import yajco.annotation.After;
 import yajco.annotation.Before;
+import yajco.oberon0.expressions.Expression;
 
 public class Constant extends Declaration {
     private Expression expression;

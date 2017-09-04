@@ -2,6 +2,8 @@ package yajco.oberon0;
 
 import org.junit.Before;
 import org.junit.Test;
+import yajco.oberon0.expressions.*;
+import yajco.oberon0.expressions.Number;
 import yajco.oberon0.parser.ParseException;
 import yajco.oberon0.parser.LALRModuleParser;
 
@@ -54,11 +56,15 @@ public class ParserTest {
 
     @Test
     public void constantWithExpression() throws ParseException {
-        Module module = parser.parse("MODULE Sample; CONST n = 10 + 5; END Sample.");
+        Module module = parser.parse(
+                "MODULE Sample; CONST n = 10 + (5 - 2) * (3 DIV 2 MOD 4); END Sample.");
         Constant constant = (Constant) module.getDeclarations().get(0);
         assertThat(constant.getExpression(), instanceOf(Add.class));
         Add add = (Add) constant.getExpression();
         assertThat(add.getLeft(), instanceOf(Number.class));
-        assertThat(add.getRight(), instanceOf(Number.class));
+        assertThat(add.getRight(), instanceOf(Mul.class));
+        Mul mul = (Mul) add.getRight();
+        assertThat(mul.getLeft(), instanceOf(Sub.class));
+        assertThat(mul.getRight(), instanceOf(Mod.class));
     }
 }

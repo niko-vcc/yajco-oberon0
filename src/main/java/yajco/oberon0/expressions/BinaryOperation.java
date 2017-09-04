@@ -1,4 +1,4 @@
-package yajco.oberon0;
+package yajco.oberon0.expressions;
 
 public class BinaryOperation {
     private Expression left, right;
