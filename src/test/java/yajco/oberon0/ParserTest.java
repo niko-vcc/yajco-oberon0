@@ -3,7 +3,7 @@ package yajco.oberon0;
 import org.junit.Before;
 import org.junit.Test;
 import yajco.oberon0.parser.ParseException;
-import yajco.oberon0.parser.Parser;
+import yajco.oberon0.parser.LALRModuleParser;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import static org.junit.Assert.assertThat;
 
 public class ParserTest {
 
-    private Parser parser;
+    private LALRModuleParser parser;
 
     @Before
     public void createParser() {
-        parser = new Parser();
+        parser = new LALRModuleParser();
     }
 
     @Test
@@ -50,5 +50,15 @@ public class ParserTest {
         assertEquals("n", constant.getName());
         assertThat(constant.getExpression(), instanceOf(Number.class));
         assertEquals(3, ((Number) constant.getExpression()).getValue());
+    }
+
+    @Test
+    public void constantWithExpression() throws ParseException {
+        Module module = parser.parse("MODULE Sample; CONST n = 10 + 5; END Sample.");
+        Constant constant = (Constant) module.getDeclarations().get(0);
+        assertThat(constant.getExpression(), instanceOf(Add.class));
+        Add add = (Add) constant.getExpression();
+        assertThat(add.getLeft(), instanceOf(Number.class));
+        assertThat(add.getRight(), instanceOf(Number.class));
     }
 }
