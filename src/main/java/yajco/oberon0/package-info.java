@@ -1,7 +1,10 @@
 @Parser(
         mainNode = "yajco.oberon0.Module",
         skips = {@Skip("\\s"), @Skip("//.*")},
-        tokens = @TokenDef(name = "name", regexp = "[A-Za-z][A-Za-z0-9]*")
+        tokens = {
+                @TokenDef(name = "name", regexp = "[A-Za-z][A-Za-z0-9]*"),
+                @TokenDef(name = "integer", regexp = "[0-9]+")
+        }
 )
 package yajco.oberon0;
 
