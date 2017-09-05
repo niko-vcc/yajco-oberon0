@@ -4,10 +4,9 @@ import yajco.annotation.Before;
 import yajco.annotation.Operator;
 import yajco.model.pattern.impl.Associativity;
 
-public class Add extends BinaryOperation implements Expression {
+public class Add extends BinaryOperation {
     @Operator(priority = 2, associativity = Associativity.LEFT)
     public Add(Expression left, @Before("+") Expression right) {
-        setLeft(left);
-        setRight(right);
+        super(left, right);
     }
 }

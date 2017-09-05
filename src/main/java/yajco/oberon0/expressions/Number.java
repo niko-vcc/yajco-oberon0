@@ -2,7 +2,7 @@ package yajco.oberon0.expressions;
 
 import yajco.annotation.Token;
 
-public class Number implements Expression {
+public class Number extends Expression {
     private int value;
 
     public Number(@Token("integer") int value) {

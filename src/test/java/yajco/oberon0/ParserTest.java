@@ -57,7 +57,7 @@ public class ParserTest {
     @Test
     public void constantWithExpression() throws ParseException {
         Module module = parser.parse(
-                "MODULE Sample; CONST n = 10 + (5 - 2) * (3 DIV 2 MOD 4); END Sample.");
+                "MODULE Sample; CONST n = 10 + (-5 - 2) * (3 DIV 2 MOD 4); END Sample.");
         Constant constant = (Constant) module.getDeclarations().get(0);
         assertThat(constant.getExpression(), instanceOf(Add.class));
         Add add = (Add) constant.getExpression();
