@@ -67,4 +67,11 @@ public class ParserTest {
         assertThat(mul.getLeft(), instanceOf(Sub.class));
         assertThat(mul.getRight(), instanceOf(Mod.class));
     }
+
+    @Test
+    public void singleAssignment() throws ParseException {
+        Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
+        assertEquals(1, module.getStatements().size());
+        assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
+    }
 }
