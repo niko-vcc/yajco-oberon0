@@ -10,6 +10,7 @@ import yajco.oberon0.parser.LALRModuleParser;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -47,8 +48,8 @@ public class ParserTest {
         Module module = parser.parse("MODULE Sample; CONST n = 3; END Sample.");
         List<Declaration> declarations = module.getDeclarations();
         assertEquals(1, declarations.size());
-        assertThat(declarations.get(0), instanceOf(Constant.class));
-        Constant constant = (Constant) declarations.get(0);
+        assertThat(declarations.get(0), instanceOf(Variable.class));
+        Variable constant = (Variable) declarations.get(0);
         assertEquals("n", constant.getName());
         assertThat(constant.getExpression(), instanceOf(Number.class));
         assertEquals(3, ((Number) constant.getExpression()).getValue());
@@ -58,7 +59,7 @@ public class ParserTest {
     public void constantWithExpression() throws ParseException {
         Module module = parser.parse(
                 "MODULE Sample; CONST n = 10 + (-5 - 2) * (3 DIV 2 MOD 4); END Sample.");
-        Constant constant = (Constant) module.getDeclarations().get(0);
+        Variable constant = (Variable) module.getDeclarations().get(0);
         assertThat(constant.getExpression(), instanceOf(Add.class));
         Add add = (Add) constant.getExpression();
         assertThat(add.getLeft(), instanceOf(Number.class));
@@ -73,5 +74,27 @@ public class ParserTest {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
         assertEquals(1, module.getStatements().size());
         assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
+        Assignment assignment = (Assignment) module.getStatements().get(0);
+        assertThat(assignment.getVariable().getName(), is("x"));
+    }
+
+    @Test
+    public void variableReference() throws ParseException {
+        Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := x END Single.");
+        Assignment assignment = (Assignment) module.getStatements().get(0);
+        assertThat(assignment.getExpression(), instanceOf(Reference.class));
+        Reference ref = (Reference) assignment.getExpression();
+        assertThat(ref.getVariable().isConstant(), is(false));
+        assertThat(ref.getVariable().getName(), is("x"));
+    }
+
+    @Test
+    public void constantReference() throws ParseException {
+        Module module = parser.parse("MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN x := a END Single.");
+        Assignment assignment = (Assignment) module.getStatements().get(0);
+        assertThat(assignment.getExpression(), instanceOf(Reference.class));
+        Reference ref = (Reference) assignment.getExpression();
+        assertThat(ref.getVariable().isConstant(), is(true));
+        assertThat(ref.getVariable().getName(), is("a"));
     }
 }
