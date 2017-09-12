@@ -136,4 +136,17 @@ public class ParserTest {
         assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
         assertThat(ifStmt.getElseBranch().get(0), instanceOf(Assignment.class));
     }
+
+    @Test
+    public void whileStatement() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Single; VAR x: INTEGER; BEGIN\n"
+              + "  x := 2;\n"
+              + "  WHILE x < 100 DO x := x * 3 END\n"
+              + "END Single.");
+        assertThat(module.getStatements().get(1), instanceOf(WhileStatement.class));
+        WhileStatement whileStmt = (WhileStatement) module.getStatements().get(1);
+        assertThat(whileStmt.getCondition(), instanceOf(Less.class));
+        assertThat(whileStmt.getBody().get(0), instanceOf(Assignment.class));
+    }
 }
