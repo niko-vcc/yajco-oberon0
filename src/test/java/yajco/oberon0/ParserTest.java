@@ -70,6 +70,20 @@ public class ParserTest {
     }
 
     @Test
+    public void constantWithBooleanExpression() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Sample; CONST a = (10 > 3) OR (3 # 5-1) & ~(4 <= 5); END Sample.");
+        Variable constant = (Variable) module.getDeclarations().get(0);
+        assertThat(constant.getExpression(), instanceOf(Or.class));
+        Or or = (Or) constant.getExpression();
+        assertThat(or.getLeft(), instanceOf(Greater.class));
+        assertThat(or.getRight(), instanceOf(And.class));
+        And and = (And) or.getRight();
+        assertThat(and.getLeft(), instanceOf(NotEquals.class));
+        assertThat(and.getRight(), instanceOf(Not.class));
+    }
+
+    @Test
     public void singleAssignment() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
         assertEquals(1, module.getStatements().size());
@@ -96,5 +110,30 @@ public class ParserTest {
         Reference ref = (Reference) assignment.getExpression();
         assertThat(ref.getVariable().isConstant(), is(true));
         assertThat(ref.getVariable().getName(), is("a"));
+    }
+
+    @Test
+    public void ifStatement() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+              + "  IF a = 3 THEN x := 1 END\n"
+              + "END Single.");
+        assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
+        IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
+        assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
+        assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
+    }
+
+    @Test
+    public void ifWithElse() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+              + "  IF a = 3 THEN x := 1 ELSE x := 2 END\n"
+              + "END Single.");
+        assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
+        IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
+        assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
+        assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
+        assertThat(ifStmt.getElseBranch().get(0), instanceOf(Assignment.class));
     }
 }
