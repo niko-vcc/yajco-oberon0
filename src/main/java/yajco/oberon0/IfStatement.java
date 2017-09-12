@@ -1,5 +1,7 @@
 package yajco.oberon0;
 
+import java.util.Collections;
+
 import yajco.annotation.After;
 import yajco.annotation.Before;
 import yajco.oberon0.expressions.Expression;
@@ -24,6 +26,16 @@ public class IfStatement extends Statement {
         this.condition = condition;
         this.thenBranch = thenBranch;
         this.elseBranch = elseBranch;
+    }
+
+    @Before("IF") @After("END")
+    public IfStatement(
+            Expression condition,
+            @Before("THEN") StatementSequence thenBranch,
+            ElsifFragment elsif) {
+        this.condition = condition;
+        this.thenBranch = thenBranch;
+        this.elseBranch = new StatementSequence(Collections.singletonList(elsif.getStatement()));
     }
 
     public Expression getCondition() {

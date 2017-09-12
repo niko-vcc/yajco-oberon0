@@ -115,9 +115,9 @@ public class ParserTest {
     @Test
     public void ifStatement() throws ParseException {
         Module module = parser.parse(
-                "MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+                "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
               + "  IF a = 3 THEN x := 1 END\n"
-              + "END Single.");
+              + "END Test.");
         assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
         IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
         assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
@@ -127,9 +127,26 @@ public class ParserTest {
     @Test
     public void ifWithElse() throws ParseException {
         Module module = parser.parse(
-                "MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+                "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+              + "  IF a = 3 THEN x := 1 ELSIF a < 5 THEN x := 2 ELSE x := 3 END\n"
+              + "END Test.");
+        assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
+        IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
+        assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
+        assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
+        assertThat(ifStmt.getElseBranch().get(0), instanceOf(IfStatement.class));
+        IfStatement secondIf = (IfStatement) ifStmt.getElseBranch().get(0);
+        assertThat(secondIf.getCondition(), instanceOf(Less.class));
+        assertThat(secondIf.getThenBranch().get(0), instanceOf(Assignment.class));
+        assertThat(secondIf.getElseBranch().get(0), instanceOf(Assignment.class));
+    }
+
+    @Test
+    public void ifWithElsif() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
               + "  IF a = 3 THEN x := 1 ELSE x := 2 END\n"
-              + "END Single.");
+              + "END Test.");
         assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
         IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
         assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
@@ -140,10 +157,10 @@ public class ParserTest {
     @Test
     public void whileStatement() throws ParseException {
         Module module = parser.parse(
-                "MODULE Single; VAR x: INTEGER; BEGIN\n"
+                "MODULE Test; VAR x: INTEGER; BEGIN\n"
               + "  x := 2;\n"
               + "  WHILE x < 100 DO x := x * 3 END\n"
-              + "END Single.");
+              + "END Test.");
         assertThat(module.getStatements().get(1), instanceOf(WhileStatement.class));
         WhileStatement whileStmt = (WhileStatement) module.getStatements().get(1);
         assertThat(whileStmt.getCondition(), instanceOf(Less.class));

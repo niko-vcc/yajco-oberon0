@@ -1,0 +1,25 @@
+package yajco.oberon0;
+
+import yajco.annotation.Before;
+import yajco.oberon0.expressions.Expression;
+
+public class ElsifFragment {
+    private IfStatement statement;
+
+    @Before("ELSIF")
+    public ElsifFragment(Expression condition,
+            @Before("THEN") StatementSequence thenBranch) {
+        this.statement = new IfStatement(condition, thenBranch);
+    }
+
+    @Before("ELSIF")
+    public ElsifFragment(Expression condition,
+            @Before("THEN") StatementSequence thenBranch,
+            @Before("ELSE") StatementSequence elseBranch) {
+        this.statement = new IfStatement(condition, thenBranch, elseBranch);
+    }
+
+    public Statement getStatement() {
+        return statement;
+    }
+}
