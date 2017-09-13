@@ -4,33 +4,36 @@ import yajco.annotation.After;
 import yajco.annotation.Before;
 import yajco.annotation.Token;
 
-import java.util.BitSet;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Module {
     private String name;
-    private List<Declaration> declarations;
+    private List<Declaration> declarations = new ArrayList<>();
     private StatementSequence statements;
 
     @Before("MODULE")
     public Module(
             @After(";") String name,
-            List<Declaration> declarations,
+            ConstantsDeclaration constants,
+            VariablesDeclaration variables,
             @Token("name") @Before("END") @After(".") String nameRepeated) {
         if (!name.equals(nameRepeated)) {
             throw new RuntimeException("Unmatching module name at the end.");
         }
         this.name = name;
-        this.declarations = declarations;
+        this.declarations.addAll(constants.getDeclarations());
+        this.declarations.addAll(variables.getVariables());
     }
 
     @Before("MODULE")
     public Module(
             @After(";") String name,
-            List<Declaration> declarations,
+            ConstantsDeclaration constants,
+            VariablesDeclaration variables,
             @Before("BEGIN") StatementSequence statements,
             @Token("name") @Before("END") @After(".") String nameRepeated) {
-        this(name, declarations, nameRepeated);
+        this(name, constants, variables, nameRepeated);
         this.statements = statements;
     }
 

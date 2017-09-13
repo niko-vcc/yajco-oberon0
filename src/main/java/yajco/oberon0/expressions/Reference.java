@@ -1,15 +1,16 @@
 package yajco.oberon0.expressions;
 
-import yajco.annotation.reference.References;
-import yajco.oberon0.Variable;
+import yajco.oberon0.Memory;
 
 public class Reference extends Expression {
-    private Variable variable;
+    private final String name;
+    private Memory variable;
 
-    public Reference(@References(Variable.class) String name) {
+    public Reference(String name) {
+        this.name = name;
     }
 
-    public Variable getVariable() {
+    public Memory getVariable() {
         return variable;
     }
 }

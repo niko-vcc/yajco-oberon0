@@ -44,22 +44,31 @@ public class ParserTest {
     }
 
     @Test
+    public void multipleVariableDeclarations() throws ParseException {
+        Module module = parser.parse("MODULE Test; VAR x, y: INTEGER; END Test.");
+        List<Declaration> declarations = module.getDeclarations();
+        assertThat(declarations.size(), is(2));
+        assertThat(declarations.get(0).getName(), is("x"));
+        assertThat(declarations.get(1).getName(), is("y"));
+    }
+
+    @Test
     public void constantDeclaration() throws ParseException {
         Module module = parser.parse("MODULE Sample; CONST n = 3; END Sample.");
         List<Declaration> declarations = module.getDeclarations();
-        assertEquals(1, declarations.size());
-        assertThat(declarations.get(0), instanceOf(Variable.class));
-        Variable constant = (Variable) declarations.get(0);
-        assertEquals("n", constant.getName());
+        assertThat(declarations.size(), is(1));
+        assertThat(declarations.get(0), instanceOf(Constant.class));
+        Constant constant = (Constant) declarations.get(0);
+        assertThat(constant.getName(), is("n"));
         assertThat(constant.getExpression(), instanceOf(Number.class));
-        assertEquals(3, ((Number) constant.getExpression()).getValue());
+        assertThat(((Number) constant.getExpression()).getValue(), is(3));
     }
 
     @Test
     public void constantWithExpression() throws ParseException {
         Module module = parser.parse(
                 "MODULE Sample; CONST n = 10 + (-5 - 2) * (3 DIV 2 MOD 4); END Sample.");
-        Variable constant = (Variable) module.getDeclarations().get(0);
+        Constant constant = (Constant) module.getDeclarations().get(0);
         assertThat(constant.getExpression(), instanceOf(Add.class));
         Add add = (Add) constant.getExpression();
         assertThat(add.getLeft(), instanceOf(Number.class));
@@ -73,7 +82,7 @@ public class ParserTest {
     public void constantWithBooleanExpression() throws ParseException {
         Module module = parser.parse(
                 "MODULE Sample; CONST a = (10 > 3) OR (3 # 5-1) & ~(4 <= 5); END Sample.");
-        Variable constant = (Variable) module.getDeclarations().get(0);
+        Constant constant = (Constant) module.getDeclarations().get(0);
         assertThat(constant.getExpression(), instanceOf(Or.class));
         Or or = (Or) constant.getExpression();
         assertThat(or.getLeft(), instanceOf(Greater.class));
@@ -98,7 +107,7 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getVariable().isConstant(), is(false));
+        assertThat(ref.getVariable().isMutable(), is(true));
         assertThat(ref.getVariable().getName(), is("x"));
     }
 
@@ -108,7 +117,7 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getVariable().isConstant(), is(true));
+        assertThat(ref.getVariable().isMutable(), is(false));
         assertThat(ref.getVariable().getName(), is("a"));
     }
 
