@@ -20,14 +20,14 @@ public class NamesResolver extends Visitor<Declarations> {
 
     @Override
     protected void visitReference(Reference reference, Declarations declarations) {
-        Declaration declaration = declarations.getDeclaration(reference.getName());
-        reference.setVariable((Memory) declaration);
+        Entity entity = declarations.getEntity(reference.getName());
+        reference.setEntity(entity);
     }
 
     @Override
     protected void visitAssignment(Assignment assignment, Declarations declarations) {
-        Declaration declaration = declarations.getDeclaration(assignment.getName());
-        assignment.setVariable((Variable) declaration);
+        Entity entity = declarations.getEntity(assignment.getName());
+        assignment.setVariable((Variable) entity);
         super.visitAssignment(assignment, declarations);
     }
 }

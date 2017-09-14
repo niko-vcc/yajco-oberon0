@@ -108,8 +108,8 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getVariable().isMutable(), is(true));
-        assertThat(ref.getVariable().getName(), is("x"));
+        assertThat(ref.getEntity(), instanceOf(Variable.class));
+        assertThat(ref.getEntity().getName(), is("x"));
     }
 
     @Test
@@ -119,8 +119,8 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getVariable().isMutable(), is(false));
-        assertThat(ref.getVariable().getName(), is("a"));
+        assertThat(ref.getEntity(), instanceOf(Constant.class));
+        assertThat(ref.getEntity().getName(), is("a"));
     }
 
     @Test

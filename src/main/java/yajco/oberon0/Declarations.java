@@ -6,7 +6,7 @@ import java.util.Map;
 public class Declarations {
     private ConstantsDeclaration constants;
     private VariablesDeclaration variables;
-    private Map<String, Declaration> symbolTable = new HashMap<>();
+    private Map<String, Entity> symbolTable = new HashMap<>();
 
     public Declarations(ConstantsDeclaration constants, VariablesDeclaration variables) {
         this.constants = constants;
@@ -27,7 +27,7 @@ public class Declarations {
         return variables;
     }
 
-    public Declaration getDeclaration(String name) {
+    public Entity getEntity(String name) {
         return symbolTable.get(name);
     }
 }

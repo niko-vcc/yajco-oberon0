@@ -1,9 +1,9 @@
 package yajco.oberon0;
 
-public abstract class Declaration {
+public abstract class Entity {
     private String name;
 
-    public Declaration(String name) {
+    public Entity(String name) {
         this.name = name;
     }
 
