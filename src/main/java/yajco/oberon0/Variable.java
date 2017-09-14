@@ -3,12 +3,17 @@ package yajco.oberon0;
 import yajco.annotation.Exclude;
 
 public class Variable extends Entity {
+    private Type type;
+
     public Variable(String name) {
         super(name);
     }
 
-    @Exclude
-    public Variable(String name, String type) {
-        super(name);
+    public Type getType() {
+        return type;
+    }
+
+    void setType(Type type) {
+        this.type = type;
     }
 }

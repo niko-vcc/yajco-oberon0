@@ -40,6 +40,9 @@ public class ParserTest {
         assertThat(variables.size(), is(1));
         assertThat(variables.get(0).getName(), is("x"));
         assertThat(variables.get(0), instanceOf(Variable.class));
+        Type type = variables.get(0).getType();
+        assertThat(type, instanceOf(TypeReference.class));
+        assertThat(((TypeReference) type).getName(), is("INTEGER"));
     }
 
     @Test

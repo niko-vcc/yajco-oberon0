@@ -3,22 +3,29 @@ package yajco.oberon0;
 import yajco.annotation.After;
 import yajco.annotation.Before;
 import yajco.annotation.Separator;
-import yajco.annotation.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VariablesGroup {
-    private List<Variable> variables = new ArrayList<>();
+    private List<Variable> variables;
+    private Type type;
 
     @After(";")
     public VariablesGroup(
             @Separator(",") List<Variable> variables,
-            @Before(":") @Token("name") String type) {
-        this.variables.addAll(variables);
+            @Before(":") Type type) {
+        this.variables = variables;
+        this.type = type;
+        for (Variable variable: variables) {
+            variable.setType(type);
+        }
     }
 
     public List<Variable> getVariables() {
         return variables;
+    }
+
+    public Type getType() {
+        return type;
     }
 }
