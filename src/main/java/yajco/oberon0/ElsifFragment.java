@@ -22,4 +22,20 @@ public class ElsifFragment {
     public Statement getStatement() {
         return statement;
     }
+
+    public Expression getCondition() {
+        return statement.getCondition();
+    }
+
+    public StatementSequence getThenBranch() {
+        return statement.getThenBranch();
+    }
+
+    public StatementSequence getElseBranch() {
+        return statement.getElseBranch();
+    }
+
+    public ElsifFragment getElsif() {
+        return statement.getElsif();
+    }
 }

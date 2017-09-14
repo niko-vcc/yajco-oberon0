@@ -12,4 +12,8 @@ public class ConstantsDeclaration extends ArrayList<Constant> {
     public ConstantsDeclaration(List<Constant> declarations) {
         addAll(declarations);
     }
+
+    public List<Constant> getDeclarations() {
+        return this;
+    }
 }

@@ -10,7 +10,15 @@ public class Reference extends Expression {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Memory getVariable() {
         return variable;
+    }
+
+    public void setVariable(Memory variable) {
+        this.variable = variable;
     }
 }

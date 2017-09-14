@@ -20,4 +20,8 @@ public class StatementSequence {
     public Statement get(int i) {
         return statements.get(i);
     }
+
+    public List<Statement> getStatements() {
+        return statements;
+    }
 }

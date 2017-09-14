@@ -49,4 +49,8 @@ public class IfStatement extends Statement {
     public StatementSequence getElseBranch() {
         return elseBranch;
     }
+
+    public ElsifFragment getElsif() {
+        return null;
+    }
 }

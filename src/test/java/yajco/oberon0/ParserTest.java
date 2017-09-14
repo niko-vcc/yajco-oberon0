@@ -94,6 +94,7 @@ public class ParserTest {
     @Test
     public void singleAssignment() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
+        NamesResolver.resolve(module);
         assertThat(module.getStatements().size(), is(1));
         assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
         Assignment assignment = (Assignment) module.getStatements().get(0);
@@ -103,6 +104,7 @@ public class ParserTest {
     @Test
     public void variableReference() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := x END Single.");
+        NamesResolver.resolve(module);
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
@@ -113,6 +115,7 @@ public class ParserTest {
     @Test
     public void constantReference() throws ParseException {
         Module module = parser.parse("MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN x := a END Single.");
+        NamesResolver.resolve(module);
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
