@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ParserTest {
@@ -26,7 +25,7 @@ public class ParserTest {
     @Test
     public void emptyModule() throws ParseException {
         Module module = parser.parse("MODULE Empty; END Empty.");
-        assertEquals("Empty", module.getName());
+        assertThat(module.getName(), is("Empty"));
     }
 
     @Test(expected = RuntimeException.class)
@@ -37,28 +36,28 @@ public class ParserTest {
     @Test
     public void variableDeclaration() throws ParseException {
         Module module = parser.parse("MODULE Sample; VAR x: INTEGER; END Sample.");
-        List<Declaration> declarations = module.getDeclarations();
-        assertEquals(1, declarations.size());
-        assertEquals("x", declarations.get(0).getName());
-        assertThat(declarations.get(0), instanceOf(Variable.class));
+        List<Variable> variables = module.getDeclarations().getVariables();
+        assertThat(variables.size(), is(1));
+        assertThat(variables.get(0).getName(), is("x"));
+        assertThat(variables.get(0), instanceOf(Variable.class));
     }
 
     @Test
     public void multipleVariableDeclarations() throws ParseException {
         Module module = parser.parse("MODULE Test; VAR x, y: INTEGER; END Test.");
-        List<Declaration> declarations = module.getDeclarations();
-        assertThat(declarations.size(), is(2));
-        assertThat(declarations.get(0).getName(), is("x"));
-        assertThat(declarations.get(1).getName(), is("y"));
+        List<Variable> variables = module.getDeclarations().getVariables();
+        assertThat(variables.size(), is(2));
+        assertThat(variables.get(0).getName(), is("x"));
+        assertThat(variables.get(1).getName(), is("y"));
     }
 
     @Test
     public void constantDeclaration() throws ParseException {
         Module module = parser.parse("MODULE Sample; CONST n = 3; END Sample.");
-        List<Declaration> declarations = module.getDeclarations();
-        assertThat(declarations.size(), is(1));
-        assertThat(declarations.get(0), instanceOf(Constant.class));
-        Constant constant = (Constant) declarations.get(0);
+        List<Constant> constants = module.getDeclarations().getConstants();
+        assertThat(constants.size(), is(1));
+        assertThat(constants.get(0), instanceOf(Constant.class));
+        Constant constant = constants.get(0);
         assertThat(constant.getName(), is("n"));
         assertThat(constant.getExpression(), instanceOf(Number.class));
         assertThat(((Number) constant.getExpression()).getValue(), is(3));
@@ -68,7 +67,7 @@ public class ParserTest {
     public void constantWithExpression() throws ParseException {
         Module module = parser.parse(
                 "MODULE Sample; CONST n = 10 + (-5 - 2) * (3 DIV 2 MOD 4); END Sample.");
-        Constant constant = (Constant) module.getDeclarations().get(0);
+        Constant constant = module.getDeclarations().getConstants().get(0);
         assertThat(constant.getExpression(), instanceOf(Add.class));
         Add add = (Add) constant.getExpression();
         assertThat(add.getLeft(), instanceOf(Number.class));
@@ -82,7 +81,7 @@ public class ParserTest {
     public void constantWithBooleanExpression() throws ParseException {
         Module module = parser.parse(
                 "MODULE Sample; CONST a = (10 > 3) OR (3 # 5-1) & ~(4 <= 5); END Sample.");
-        Constant constant = (Constant) module.getDeclarations().get(0);
+        Constant constant = module.getDeclarations().getConstants().get(0);
         assertThat(constant.getExpression(), instanceOf(Or.class));
         Or or = (Or) constant.getExpression();
         assertThat(or.getLeft(), instanceOf(Greater.class));
@@ -95,7 +94,7 @@ public class ParserTest {
     @Test
     public void singleAssignment() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
-        assertEquals(1, module.getStatements().size());
+        assertThat(module.getStatements().size(), is(1));
         assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getVariable().getName(), is("x"));

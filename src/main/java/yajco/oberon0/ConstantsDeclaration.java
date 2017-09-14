@@ -2,23 +2,14 @@ package yajco.oberon0;
 
 import yajco.annotation.Before;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class ConstantsDeclaration {
-    private final List<Constant> declarations;
-
+public class ConstantsDeclaration extends ArrayList<Constant> {
     public ConstantsDeclaration() {
-        declarations = Collections.emptyList();
     }
 
     @Before("CONST")
     public ConstantsDeclaration(List<Constant> declarations) {
-
-        this.declarations = declarations;
-    }
-
-    public List<Constant> getDeclarations() {
-        return declarations;
+        addAll(declarations);
     }
 }

@@ -5,8 +5,7 @@ import yajco.annotation.Before;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VariablesDeclaration {
-    private List<Variable> variables = new ArrayList<>();
+public class VariablesDeclaration extends ArrayList<Variable> {
 
     public VariablesDeclaration() {
     }
@@ -14,11 +13,7 @@ public class VariablesDeclaration {
     @Before("VAR")
     public VariablesDeclaration(List<VariablesGroup> groups) {
         for (VariablesGroup group : groups) {
-            variables.addAll(group.getVariables());
+            addAll(group.getVariables());
         }
-    }
-
-    public List<Variable> getVariables() {
-        return variables;
     }
 }
