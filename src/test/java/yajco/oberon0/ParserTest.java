@@ -41,8 +41,7 @@ public class ParserTest {
         assertThat(variables.get(0).getName(), is("x"));
         assertThat(variables.get(0), instanceOf(Variable.class));
         Type type = variables.get(0).getType();
-        assertThat(type, instanceOf(TypeReference.class));
-        assertThat(((TypeReference) type).getName(), is("INTEGER"));
+        assertThat(type.getName(), is("INTEGER"));
     }
 
     @Test
@@ -64,6 +63,16 @@ public class ParserTest {
         assertThat(constant.getName(), is("n"));
         assertThat(constant.getExpression(), instanceOf(Number.class));
         assertThat(((Number) constant.getExpression()).getValue(), is(3));
+    }
+
+    @Test
+    public void typeDeclaration() throws ParseException {
+        Module module = parser.parse("MODULE Sample; TYPE T = INTEGER; END Sample.");
+        List<DeclaredType> types = module.getDeclarations().getTypes();
+        assertThat(types.size(), is(1));
+        DeclaredType declaredType = types.get(0);
+        assertThat(declaredType.getName(), is("T"));
+        assertThat(declaredType.getType().getName(), is("INTEGER"));
     }
 
     @Test
