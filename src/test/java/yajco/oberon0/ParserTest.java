@@ -2,10 +2,11 @@ package yajco.oberon0;
 
 import org.junit.Before;
 import org.junit.Test;
-import yajco.oberon0.expressions.*;
-import yajco.oberon0.expressions.Number;
-import yajco.oberon0.parser.ParseException;
-import yajco.oberon0.parser.LALRModuleParser;
+import yajco.oberon0.model.*;
+import yajco.oberon0.model.Number;
+import yajco.oberon0.model.operators.*;
+import yajco.oberon0.model.parser.LALRModuleParser;
+import yajco.oberon0.model.parser.ParseException;
 
 import java.util.List;
 

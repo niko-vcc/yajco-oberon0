@@ -1,8 +1,8 @@
 package yajco.oberon0;
 
 import yajco.annotation.Exclude;
-import yajco.oberon0.expressions.Reference;
-import yajco.oberon0.visitor.Visitor;
+import yajco.oberon0.model.*;
+import yajco.oberon0.model.visitor.Visitor;
 
 @Exclude
 public class NamesResolver extends Visitor<Declarations> {
