@@ -4,12 +4,12 @@ import yajco.annotation.Before;
 
 import java.util.*;
 
-public class ConstantsDeclaration extends ArrayList<Constant> {
-    public ConstantsDeclaration() {
+public class ConstantDeclarations extends ArrayList<Constant> {
+    public ConstantDeclarations() {
     }
 
     @Before("CONST")
-    public ConstantsDeclaration(List<Constant> declarations) {
+    public ConstantDeclarations(List<Constant> declarations) {
         addAll(declarations);
     }
 

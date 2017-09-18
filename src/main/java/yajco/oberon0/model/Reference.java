@@ -2,7 +2,7 @@ package yajco.oberon0.model;
 
 public class Reference extends Expression {
     private final String name;
-    private Entity entity;
+    private Declaration declaration;
 
     public Reference(String name) {
         this.name = name;
@@ -12,11 +12,11 @@ public class Reference extends Expression {
         return name;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public Declaration getDeclaration() {
+        return declaration;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setDeclaration(Declaration declaration) {
+        this.declaration = declaration;
     }
 }

@@ -4,11 +4,11 @@ package yajco.oberon0.model;
 import yajco.annotation.After;
 import yajco.annotation.Before;
 
-public class DeclaredType extends Entity {
+public class TypeDeclaration extends Declaration {
     private final Type type;
 
     @After(";")
-    public DeclaredType(String name, @Before("=") Type type) {
+    public TypeDeclaration(String name, @Before("=") Type type) {
         super(name);
         this.type = type;
     }

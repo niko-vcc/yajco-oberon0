@@ -69,11 +69,11 @@ public class ParserTest {
     @Test
     public void typeDeclaration() throws ParseException {
         Module module = parser.parse("MODULE Sample; TYPE T = INTEGER; END Sample.");
-        List<DeclaredType> types = module.getDeclarations().getTypes();
+        List<TypeDeclaration> types = module.getDeclarations().getTypes();
         assertThat(types.size(), is(1));
-        DeclaredType declaredType = types.get(0);
-        assertThat(declaredType.getName(), is("T"));
-        assertThat(declaredType.getType().getName(), is("INTEGER"));
+        TypeDeclaration typeDeclaration = types.get(0);
+        assertThat(typeDeclaration.getName(), is("T"));
+        assertThat(typeDeclaration.getType().getName(), is("INTEGER"));
     }
 
     @Test
@@ -121,8 +121,8 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getEntity(), instanceOf(Variable.class));
-        assertThat(ref.getEntity().getName(), is("x"));
+        assertThat(ref.getDeclaration(), instanceOf(Variable.class));
+        assertThat(ref.getDeclaration().getName(), is("x"));
     }
 
     @Test
@@ -132,8 +132,8 @@ public class ParserTest {
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getEntity(), instanceOf(Constant.class));
-        assertThat(ref.getEntity().getName(), is("a"));
+        assertThat(ref.getDeclaration(), instanceOf(Constant.class));
+        assertThat(ref.getDeclaration().getName(), is("a"));
     }
 
     @Test
