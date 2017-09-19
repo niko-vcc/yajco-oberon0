@@ -107,33 +107,28 @@ public class ParserTest {
     @Test
     public void singleAssignment() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := 5 END Single.");
-        NamesResolver.resolve(module);
         assertThat(module.getStatements().size(), is(1));
         assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
         Assignment assignment = (Assignment) module.getStatements().get(0);
-        assertThat(assignment.getVariable().getName(), is("x"));
+        assertThat(assignment.getName(), is("x"));
     }
 
     @Test
     public void variableReference() throws ParseException {
         Module module = parser.parse("MODULE Single; VAR x: INTEGER; BEGIN x := x END Single.");
-        NamesResolver.resolve(module);
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getDeclaration(), instanceOf(Variable.class));
-        assertThat(ref.getDeclaration().getName(), is("x"));
+        assertThat(ref.getName(), is("x"));
     }
 
     @Test
     public void constantReference() throws ParseException {
         Module module = parser.parse("MODULE Single; CONST a = 3; VAR x: INTEGER; BEGIN x := a END Single.");
-        NamesResolver.resolve(module);
         Assignment assignment = (Assignment) module.getStatements().get(0);
         assertThat(assignment.getExpression(), instanceOf(Reference.class));
         Reference ref = (Reference) assignment.getExpression();
-        assertThat(ref.getDeclaration(), instanceOf(Constant.class));
-        assertThat(ref.getDeclaration().getName(), is("a"));
+        assertThat(ref.getName(), is("a"));
     }
 
     @Test
@@ -152,6 +147,19 @@ public class ParserTest {
     public void ifWithElse() throws ParseException {
         Module module = parser.parse(
                 "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
+              + "  IF a = 3 THEN x := 1 ELSE x := 2 END\n"
+              + "END Test.");
+        assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
+        IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
+        assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
+        assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
+        assertThat(ifStmt.getElseBranch().get(0), instanceOf(Assignment.class));
+    }
+
+    @Test
+    public void ifWithElsif() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
               + "  IF a = 3 THEN x := 1 ELSIF a < 5 THEN x := 2 ELSE x := 3 END\n"
               + "END Test.");
         assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
@@ -166,16 +174,16 @@ public class ParserTest {
     }
 
     @Test
-    public void ifWithElsif() throws ParseException {
+    public void nestedElsif() throws ParseException {
         Module module = parser.parse(
                 "MODULE Test; CONST a = 3; VAR x: INTEGER; BEGIN\n"
-              + "  IF a = 3 THEN x := 1 ELSE x := 2 END\n"
+              + "  IF a = 3 THEN x := 1 ELSIF a < 5 THEN x := 2 ELSIF a >= 9 THEN x := 3 END\n"
               + "END Test.");
         assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
         IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
-        assertThat(ifStmt.getCondition(), instanceOf(Equals.class));
-        assertThat(ifStmt.getThenBranch().get(0), instanceOf(Assignment.class));
-        assertThat(ifStmt.getElseBranch().get(0), instanceOf(Assignment.class));
+        assertThat(ifStmt.getElseBranch().get(0), instanceOf(IfStatement.class));
+        IfStatement secondIf = (IfStatement) ifStmt.getElseBranch().get(0);
+        assertThat(secondIf.getElseBranch().get(0), instanceOf(IfStatement.class));
     }
 
     @Test

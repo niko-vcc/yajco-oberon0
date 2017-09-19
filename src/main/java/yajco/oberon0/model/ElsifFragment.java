@@ -18,6 +18,14 @@ public class ElsifFragment {
         this.statement = new IfStatement(condition, thenBranch, elseBranch);
     }
 
+    @Before("ELSIF")
+    public ElsifFragment(
+            Expression condition,
+            @Before("THEN") StatementSequence thenBranch,
+            ElsifFragment elsif) {
+        this.statement = new IfStatement(condition, thenBranch, elsif);
+    }
+
     public Statement getStatement() {
         return statement;
     }
