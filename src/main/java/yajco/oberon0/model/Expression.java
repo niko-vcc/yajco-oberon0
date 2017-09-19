@@ -4,4 +4,5 @@ import yajco.annotation.Parentheses;
 
 @Parentheses
 public abstract class Expression {
+    public abstract Type getType();
 }

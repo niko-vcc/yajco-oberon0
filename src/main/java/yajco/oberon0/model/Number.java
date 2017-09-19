@@ -12,4 +12,9 @@ public class Number extends Expression {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public Type getType() {
+        return Type.INTEGER;
+    }
 }

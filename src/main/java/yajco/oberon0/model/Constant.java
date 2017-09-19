@@ -15,4 +15,8 @@ public class Constant extends Declaration {
     public Expression getExpression() {
         return expression;
     }
+
+    public Type getType() {
+        return expression.getType();
+    }
 }

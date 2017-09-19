@@ -5,10 +5,16 @@ import yajco.annotation.Operator;
 import yajco.model.pattern.impl.Associativity;
 import yajco.oberon0.model.BinaryOperation;
 import yajco.oberon0.model.Expression;
+import yajco.oberon0.model.Type;
 
 public class Mul extends BinaryOperation {
     @Operator(priority = 3, associativity = Associativity.LEFT)
     public Mul(Expression left, @Before("*") Expression right) {
         super(left, right);
+    }
+
+    @Override
+    public Type getType() {
+        return Type.INTEGER;
     }
 }

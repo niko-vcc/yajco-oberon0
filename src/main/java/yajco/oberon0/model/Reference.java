@@ -19,4 +19,9 @@ public class Reference extends Expression {
     public void setDeclaration(Declaration declaration) {
         this.declaration = declaration;
     }
+
+    @Override
+    public Type getType() {
+        return declaration.getType();
+    }
 }

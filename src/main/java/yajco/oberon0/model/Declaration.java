@@ -10,4 +10,6 @@ public abstract class Declaration {
     public String getName() {
         return name;
     }
+
+    public abstract Type getType();
 }
