@@ -4,13 +4,20 @@ import yajco.annotation.Exclude;
 import yajco.oberon0.model.*;
 import yajco.oberon0.model.visitor.Visitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Exclude
 public class NamesResolver extends Visitor<Declarations> {
+    private List<ParserError> errors = new ArrayList<>();
+
     private NamesResolver() {
     }
 
-    public static void resolve(Module module) {
-        new NamesResolver().visit(module, null);
+    public static List<ParserError> resolve(Module module) {
+        NamesResolver resolver = new NamesResolver();
+        resolver.visit(module, null);
+        return resolver.errors;
     }
 
     @Override
@@ -20,14 +27,25 @@ public class NamesResolver extends Visitor<Declarations> {
 
     @Override
     protected void visitReference(Reference reference, Declarations declarations) {
-        Declaration declaration = declarations.getDeclaration(reference.getName());
+        String name = reference.getName();
+        Declaration declaration = declarations.getDeclaration(name);
+        if (declaration == null) {
+            errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
+        }
         reference.setDeclaration(declaration);
     }
 
     @Override
     protected void visitAssignment(Assignment assignment, Declarations declarations) {
-        Declaration declaration = declarations.getDeclaration(assignment.getName());
-        assignment.setVariable((Variable) declaration);
+        String name = assignment.getName();
+        Declaration declaration = declarations.getDeclaration(name);
+        if (declaration == null) {
+            errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
+        } else if (!(declaration instanceof Variable)) {
+            errors.add(new ParserError(String.format("Assignment to nonvariable '%s'", name)));
+        } else {
+            assignment.setVariable((Variable) declaration);
+        }
         super.visitAssignment(assignment, declarations);
     }
 }
