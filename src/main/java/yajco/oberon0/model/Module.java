@@ -42,4 +42,8 @@ public class Module {
     public StatementSequence getStatements() {
         return statements;
     }
+
+    public String getNameRepeated() {
+        return name;
+    }
 }

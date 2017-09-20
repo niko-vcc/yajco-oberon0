@@ -5,7 +5,7 @@ import yajco.annotation.Token;
 public class Number extends Expression {
     private int value;
 
-    public Number(@Token("integer") int value) {
+    public Number(@Token("integer_t") int value) {
         this.value = value;
     }
 
