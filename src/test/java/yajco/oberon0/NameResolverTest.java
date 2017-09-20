@@ -6,7 +6,6 @@ import yajco.oberon0.model.*;
 import yajco.oberon0.model.parser.LALRModuleParser;
 import yajco.oberon0.model.parser.ParseException;
 
-import java.lang.Boolean;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;

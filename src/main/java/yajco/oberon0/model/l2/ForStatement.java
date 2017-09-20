@@ -27,23 +27,12 @@ public class ForStatement extends Statement {
         return assignment;
     }
 
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
-    }
-
     public Expression getTarget() {
         return target;
-    }
-
-    public void setTarget(Expression target) {
-        this.target = target;
     }
 
     public StatementSequence getBody() {
         return body;
     }
 
-    public void setBody(StatementSequence body) {
-        this.body = body;
-    }
 }
