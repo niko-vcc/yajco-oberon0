@@ -6,10 +6,12 @@ import yajco.oberon0.model.*;
 import yajco.oberon0.model.parser.LALRModuleParser;
 import yajco.oberon0.model.parser.ParseException;
 
+import java.lang.Boolean;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static yajco.oberon0.model.Boolean.*;
 
 public class NameResolverTest {
 
@@ -52,6 +54,23 @@ public class NameResolverTest {
         Reference ref = (Reference) assignment.getExpression();
         assertThat(ref.getDeclaration(), instanceOf(Constant.class));
         assertThat(ref.getDeclaration().getName(), is("a"));
+    }
+
+    @Test
+    public void builtinConstantReference() throws ParseException {
+        Module module = parser.parse(
+                "MODULE Test; VAR x: INTEGER; BEGIN x := TRUE; x := FALSE END Test.");
+        List<ParserError> errors = NamesResolver.resolve(module);
+        assertThat(errors, empty());
+        Assignment assignment = (Assignment) module.getStatements().get(0);
+        Declaration declaration = ((Reference) assignment.getExpression()).getDeclaration();
+        assertThat(declaration, instanceOf(Constant.class));
+        assertThat(((Constant) declaration).getExpression(), is(TRUE));
+
+        assignment = (Assignment) module.getStatements().get(1);
+        declaration = ((Reference) assignment.getExpression()).getDeclaration();
+        assertThat(declaration, instanceOf(Constant.class));
+        assertThat(((Constant) declaration).getExpression(), is(FALSE));
     }
 
     @Test

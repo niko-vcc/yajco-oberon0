@@ -7,6 +7,9 @@ import yajco.oberon0.model.visitor.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static yajco.oberon0.model.Boolean.FALSE;
+import static yajco.oberon0.model.Boolean.TRUE;
+
 @Exclude
 public class NamesResolver extends Visitor<Declarations> {
     private List<ParserError> errors = new ArrayList<>();
@@ -28,11 +31,27 @@ public class NamesResolver extends Visitor<Declarations> {
     @Override
     protected void visitReference(Reference reference, Declarations declarations) {
         String name = reference.getName();
+        Constant constant = checkBuiltinConstants(name);
+        if (constant != null) {
+            reference.setDeclaration(constant);
+            return;
+        }
         Declaration declaration = declarations.getDeclaration(name);
         if (declaration == null) {
             errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
         }
         reference.setDeclaration(declaration);
+    }
+
+    private Constant checkBuiltinConstants(String name) {
+        switch (name) {
+            case "TRUE":
+                return new Constant(name, TRUE);
+            case "FALSE":
+                return new Constant(name, FALSE);
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -63,7 +82,6 @@ public class NamesResolver extends Visitor<Declarations> {
             } else {
                 reference.setReferencedType(declaration.getType());
             }
-
         }
     }
 }
