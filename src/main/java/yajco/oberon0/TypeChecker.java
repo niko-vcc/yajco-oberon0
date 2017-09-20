@@ -10,10 +10,7 @@ import java.util.List;
 
 @Exclude
 public class TypeChecker extends Visitor<Object> {
-    private List<ParserError> errors = new ArrayList<>();
-
-    private TypeChecker() {
-    }
+    protected List<ParserError> errors = new ArrayList<>();
 
     public static List<ParserError> check(Module module) {
         TypeChecker checker = new TypeChecker();

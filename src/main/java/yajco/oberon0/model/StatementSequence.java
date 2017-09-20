@@ -3,25 +3,21 @@ package yajco.oberon0.model;
 import yajco.annotation.Range;
 import yajco.annotation.Separator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class StatementSequence {
-    private List<Statement> statements;
+public class StatementSequence extends ArrayList<Statement> {
+    public static StatementSequence of(Statement statement) {
+        return new StatementSequence(Collections.singletonList(statement));
+    }
 
     public StatementSequence(
             @Separator(";") @Range(minOccurs = 1) List<Statement> statements) {
-        this.statements = statements;
-    }
-
-    public int size() {
-        return statements.size();
-    }
-
-    public Statement get(int i) {
-        return statements.get(i);
+        addAll(statements);
     }
 
     public List<Statement> getStatements() {
-        return statements;
+        return this;
     }
 }

@@ -1,11 +1,19 @@
 package yajco.oberon0.model;
 
+import yajco.annotation.Exclude;
+
 public class Reference extends Expression {
     private final String name;
     private Declaration declaration;
 
     public Reference(String name) {
         this.name = name;
+    }
+
+    @Exclude
+    public Reference(Declaration declaration) {
+        this.name = declaration.getName();
+        this.declaration = declaration;
     }
 
     public String getName() {

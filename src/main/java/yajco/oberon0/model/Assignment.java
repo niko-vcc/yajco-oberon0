@@ -1,6 +1,7 @@
 package yajco.oberon0.model;
 
 import yajco.annotation.Before;
+import yajco.annotation.Exclude;
 
 public class Assignment extends Statement {
     private String name;
@@ -11,6 +12,15 @@ public class Assignment extends Statement {
             String name,
             @Before(":=") Expression expression) {
         this.name = name;
+        this.expression = expression;
+    }
+
+    @Exclude
+    public Assignment(
+            Variable variable,
+            @Before(":=") Expression expression) {
+        this.name = variable.getName();
+        this.variable = variable;
         this.expression = expression;
     }
 
