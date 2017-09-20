@@ -15,6 +15,6 @@ public class Number extends Expression {
 
     @Override
     public Type getType() {
-        return Type.INTEGER;
+        return PrimitiveType.INTEGER;
     }
 }

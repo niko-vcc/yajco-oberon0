@@ -48,4 +48,22 @@ public class NamesResolver extends Visitor<Declarations> {
         }
         super.visitAssignment(assignment, declarations);
     }
+
+    @Override
+    protected void visitTypeReference(TypeReference reference, Declarations declarations) {
+        String name = reference.getName();
+        if (name.equals("INTEGER")) {
+            reference.setReferencedType(PrimitiveType.INTEGER);
+        } else if (name.equals("BOOLEAN")) {
+            reference.setReferencedType(PrimitiveType.BOOLEAN);
+        } else {
+            Declaration declaration = declarations.getDeclaration(name);
+            if (!(declaration instanceof TypeDeclaration)) {
+                errors.add(new ParserError(String.format("'%s' is not a type", name)));
+            } else {
+                reference.setReferencedType(declaration.getType());
+            }
+
+        }
+    }
 }

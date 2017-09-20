@@ -3,6 +3,7 @@ package yajco.oberon0.model.operators;
 import yajco.annotation.Before;
 import yajco.annotation.Operator;
 import yajco.oberon0.model.Expression;
+import yajco.oberon0.model.PrimitiveType;
 import yajco.oberon0.model.Type;
 import yajco.oberon0.model.UnaryOperation;
 
@@ -14,7 +15,7 @@ public class Not extends UnaryOperation {
 
     @Override
     public Type getType() {
-        return Type.BOOLEAN;
+        return PrimitiveType.BOOLEAN;
     }
 }
 

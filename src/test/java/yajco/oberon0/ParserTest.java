@@ -42,7 +42,8 @@ public class ParserTest {
         assertThat(variables.get(0).getName(), is("x"));
         assertThat(variables.get(0), instanceOf(Variable.class));
         Type type = variables.get(0).getType();
-        assertThat(type.getName(), is("INTEGER"));
+        assertThat(type, instanceOf(TypeReference.class));
+        assertThat(((TypeReference) type).getName(), is("INTEGER"));
     }
 
     @Test
@@ -73,7 +74,7 @@ public class ParserTest {
         assertThat(types.size(), is(1));
         TypeDeclaration typeDeclaration = types.get(0);
         assertThat(typeDeclaration.getName(), is("T"));
-        assertThat(typeDeclaration.getType().getName(), is("INTEGER"));
+        assertThat(((TypeReference) typeDeclaration.getType()).getName(), is("INTEGER"));
     }
 
     @Test

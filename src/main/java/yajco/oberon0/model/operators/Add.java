@@ -5,6 +5,7 @@ import yajco.annotation.Operator;
 import yajco.model.pattern.impl.Associativity;
 import yajco.oberon0.model.BinaryOperation;
 import yajco.oberon0.model.Expression;
+import yajco.oberon0.model.PrimitiveType;
 import yajco.oberon0.model.Type;
 
 public class Add extends BinaryOperation {
@@ -15,6 +16,6 @@ public class Add extends BinaryOperation {
 
     @Override
     public Type getType() {
-        return Type.INTEGER;
+        return PrimitiveType.INTEGER;
     }
 }

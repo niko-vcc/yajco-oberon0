@@ -24,7 +24,7 @@ public class TypeChecker extends Visitor<Object> {
     @Override
     protected void visitAssignment(Assignment assignment, Object o) {
         super.visitAssignment(assignment, o);
-        if (!assignment.getVariable().getType().equals(
+        if (!assignment.getVariable().getType().matches(
                 assignment.getExpression().getType())) {
             errors.add(new ParserError("Not matching types in assignment."));
         }
@@ -33,7 +33,7 @@ public class TypeChecker extends Visitor<Object> {
     @Override
     protected void visitIfStatement(IfStatement ifStatement, Object o) {
         super.visitIfStatement(ifStatement, o);
-        if (!ifStatement.getCondition().getType().equals(Type.BOOLEAN)) {
+        if (!ifStatement.getCondition().getType().equals(PrimitiveType.BOOLEAN)) {
             errors.add(new ParserError("Condition in IF must be boolean."));
         }
     }
@@ -41,7 +41,7 @@ public class TypeChecker extends Visitor<Object> {
     @Override
     protected void visitWhileStatement(WhileStatement whileStatement, Object o) {
         super.visitWhileStatement(whileStatement, o);
-        if (!whileStatement.getCondition().getType().equals(Type.BOOLEAN)) {
+        if (!whileStatement.getCondition().getType().equals(PrimitiveType.BOOLEAN)) {
             errors.add(new ParserError("Condition in WHILE must be boolean."));
         }
     }
@@ -49,80 +49,80 @@ public class TypeChecker extends Visitor<Object> {
     @Override
     protected void visitAdd(Add add, Object o) {
         super.visitAdd(add, o);
-        checkBinaryOperator(add, Type.INTEGER, "+");
+        checkBinaryOperator(add, PrimitiveType.INTEGER, "+");
     }
 
     @Override
     protected void visitSub(Sub sub, Object o) {
         super.visitSub(sub, o);
-        checkBinaryOperator(sub, Type.INTEGER, "-");
+        checkBinaryOperator(sub, PrimitiveType.INTEGER, "-");
     }
 
     @Override
     protected void visitMul(Mul mul, Object o) {
         super.visitMul(mul, o);
-        checkBinaryOperator(mul, Type.INTEGER, "*");
+        checkBinaryOperator(mul, PrimitiveType.INTEGER, "*");
     }
 
     @Override
     protected void visitDiv(Div div, Object o) {
         super.visitDiv(div, o);
-        checkBinaryOperator(div, Type.INTEGER, "DIV");
+        checkBinaryOperator(div, PrimitiveType.INTEGER, "DIV");
     }
 
     @Override
     protected void visitMod(Mod mod, Object o) {
         super.visitMod(mod, o);
-        checkBinaryOperator(mod, Type.INTEGER, "MOD");
+        checkBinaryOperator(mod, PrimitiveType.INTEGER, "MOD");
     }
 
     @Override
     protected void visitAnd(And and, Object o) {
         super.visitAnd(and, o);
-        checkBinaryOperator(and, Type.BOOLEAN, "&");
+        checkBinaryOperator(and, PrimitiveType.BOOLEAN, "&");
     }
 
     @Override
     protected void visitOr(Or or, Object o) {
         super.visitOr(or, o);
-        checkBinaryOperator(or, Type.BOOLEAN, "OR");
+        checkBinaryOperator(or, PrimitiveType.BOOLEAN, "OR");
     }
 
     @Override
     protected void visitLess(Less less, Object o) {
         super.visitLess(less, o);
-        checkBinaryOperator(less, Type.INTEGER, "<");
+        checkBinaryOperator(less, PrimitiveType.INTEGER, "<");
     }
 
     @Override
     protected void visitLessEquals(LessEquals lessEquals, Object o) {
         super.visitLessEquals(lessEquals, o);
-        checkBinaryOperator(lessEquals, Type.INTEGER, "<=");
+        checkBinaryOperator(lessEquals, PrimitiveType.INTEGER, "<=");
     }
 
     @Override
     protected void visitGreater(Greater greater, Object o) {
         super.visitGreater(greater, o);
-        checkBinaryOperator(greater, Type.INTEGER, ">");
+        checkBinaryOperator(greater, PrimitiveType.INTEGER, ">");
     }
 
     @Override
     protected void visitGreaterEquals(GreaterEquals greaterEquals, Object o) {
         super.visitGreaterEquals(greaterEquals, o);
-        checkBinaryOperator(greaterEquals, Type.INTEGER, ">=");
+        checkBinaryOperator(greaterEquals, PrimitiveType.INTEGER, ">=");
     }
 
     @Override
     protected void visitNot(Not not, Object o) {
         super.visitNot(not, o);
-        if (!not.getOperand().getType().equals(Type.BOOLEAN)) {
+        if (!not.getOperand().getType().matches(PrimitiveType.BOOLEAN)) {
             errors.add(new ParserError("Invalid type of operand of ~"));
         }
     }
 
     private void checkBinaryOperator(BinaryOperation and, Type type, String name) {
-        if (!and.getLeft().getType().equals(type)
-                || !and.getRight().getType().equals(type)) {
+        if (!and.getLeft().getType().matches(type)
+                || !and.getRight().getType().matches(type)) {
             errors.add(new ParserError("Invalid type of operand of " + name));
         }
     }

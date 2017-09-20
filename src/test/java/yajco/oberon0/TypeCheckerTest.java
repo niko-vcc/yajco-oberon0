@@ -4,15 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import yajco.oberon0.model.Constant;
 import yajco.oberon0.model.Module;
-import yajco.oberon0.model.Type;
+import yajco.oberon0.model.PrimitiveType;
 import yajco.oberon0.model.parser.LALRModuleParser;
 import yajco.oberon0.model.parser.ParseException;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class TypeCheckerTest {
@@ -29,7 +27,7 @@ public class TypeCheckerTest {
         List<ParserError> errors = TypeChecker.check(module);
         assertThat(errors, empty());
         Constant constant = module.getDeclarations().getConstants().get(0);
-        assertThat(constant.getType(), is(Type.INTEGER));
+        assertThat(constant.getType(), is(PrimitiveType.INTEGER));
     }
 
     @Test
@@ -38,7 +36,7 @@ public class TypeCheckerTest {
         List<ParserError> errors = TypeChecker.check(module);
         assertThat(errors, empty());
         Constant constant = module.getDeclarations().getConstants().get(0);
-        assertThat(constant.getType(), is(Type.INTEGER));
+        assertThat(constant.getType(), is(PrimitiveType.INTEGER));
     }
 
     @Test
@@ -47,7 +45,7 @@ public class TypeCheckerTest {
         List<ParserError> errors = TypeChecker.check(module);
         assertThat(errors, empty());
         Constant constant = module.getDeclarations().getConstants().get(0);
-        assertThat(constant.getType(), is(Type.BOOLEAN));
+        assertThat(constant.getType(), is(PrimitiveType.BOOLEAN));
     }
 
     @Test
@@ -78,6 +76,14 @@ public class TypeCheckerTest {
         NamesResolver.resolve(module);
         List<ParserError> errors = TypeChecker.check(module);
         assertThat(errors, hasSize(1));
+    }
+
+    @Test
+    public void customTypeAssignment() throws ParseException {
+        Module module = parser.parse("MODULE Sample; VAR x: T; TYPE T = INTEGER; BEGIN x := 1 END Sample.");
+        NamesResolver.resolve(module);
+        List<ParserError> errors = TypeChecker.check(module);
+        assertThat(errors, hasSize(0));
     }
 
     @Test
