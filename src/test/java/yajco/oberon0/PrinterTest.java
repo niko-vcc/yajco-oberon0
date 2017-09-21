@@ -36,7 +36,7 @@ public class PrinterTest {
                         + "    y := 2*y; x := x DIV 2\n"
                         + "  END\n"
                         + "END Multiply.";
-        String target = "MODULE Multiply ; VAR x, y, z : INTEGER ; BEGIN"
+        String target = "MODULE Multiply ; VAR x : INTEGER ; y : INTEGER ; z : INTEGER ; BEGIN"
                 + " x :=( 5); y :=( 7); z :=( 0);"
                 + " WHILE(( x) >( 0)) DO"
                 + " IF((( x) MOD( 2)) =( 1)) THEN z :=(( z) +( y)) END;"

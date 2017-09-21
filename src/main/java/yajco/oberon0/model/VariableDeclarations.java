@@ -1,32 +1,35 @@
 package yajco.oberon0.model;
 
 import yajco.annotation.Before;
+import yajco.annotation.Range;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.singletonList;
 
 public class VariableDeclarations extends ArrayList<Variable> {
-
-    private final List<VariablesGroup> groups;
-
-    public VariableDeclarations() {
-        this.groups = Collections.emptyList();
-    }
+    public VariableDeclarations() {}
 
     @Before("VAR")
-    public VariableDeclarations(List<VariablesGroup> groups) {
-        this.groups = groups;
+    public VariableDeclarations(@Range(minOccurs = 1) List<VariablesGroup> groups) {
         for (VariablesGroup group : groups) {
             addAll(group.getVariables());
         }
     }
 
-    public List<Variable> getDeclarations() {
-        return this;
+    public List<VariablesGroup> getGroups() {
+        return groupVariables(this);
     }
 
-    public List<VariablesGroup> getGroups() {
-        return groups;
+    public static List<VariablesGroup> groupVariables(List<Variable> vars) {
+        return vars.stream()
+                .map(v -> new VariablesGroup(singletonList(v), v.getType()))
+                .collect(Collectors.toList());
+    }
+
+    public static VariableDeclarations of(List<Variable> vars) {
+        return new VariableDeclarations(groupVariables(vars));
     }
 }

@@ -1,6 +1,7 @@
 package yajco.oberon0.model;
 
 import yajco.annotation.Before;
+import yajco.annotation.Range;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ public class ConstantDeclarations extends ArrayList<Constant> {
     }
 
     @Before("CONST")
-    public ConstantDeclarations(List<Constant> declarations) {
+    public ConstantDeclarations(@Range(minOccurs = 1) List<Constant> declarations) {
         addAll(declarations);
     }
 

@@ -1,6 +1,7 @@
 package yajco.oberon0.model;
 
 import yajco.annotation.Before;
+import yajco.annotation.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class TypeDeclarations extends ArrayList<TypeDeclaration> {
     }
 
     @Before("TYPE")
-    public TypeDeclarations(List<TypeDeclaration> declarations) {
+    public TypeDeclarations(@Range(minOccurs = 1) List<TypeDeclaration> declarations) {
         addAll(declarations);
     }
 

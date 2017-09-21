@@ -1,50 +1,47 @@
 package yajco.oberon0.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Declarations {
-    private ConstantDeclarations constants;
-    private VariableDeclarations variables;
-    private TypeDeclarations types;
     private Map<String, Declaration> symbolTable = new HashMap<>();
 
     public Declarations(ConstantDeclarations constants,
                         TypeDeclarations types,
                         VariableDeclarations variables) {
-        this.constants = constants;
-        this.types = types;
-        this.variables = variables;
-        fillSymbolTable(constants, variables, types);
+        addToSymbolTable(constants);
+        addToSymbolTable(types);
+        addToSymbolTable(variables);
     }
 
     public ConstantDeclarations getConstants() {
-        return constants;
+        return new ConstantDeclarations(symbolsByType(Constant.class));
     }
 
     public VariableDeclarations getVariables() {
-        return variables;
+        return VariableDeclarations.of(symbolsByType(Variable.class));
     }
 
     public TypeDeclarations getTypes() {
-        return types;
+        return new TypeDeclarations(symbolsByType(TypeDeclaration.class));
     }
 
     public Declaration getDeclaration(String name) {
         return symbolTable.get(name);
     }
 
-    private void fillSymbolTable(ConstantDeclarations constants,
-                                 VariableDeclarations variables,
-                                 TypeDeclarations types) {
-        for (Constant constant: constants) {
-            symbolTable.put(constant.getName(), constant);
+    private void addToSymbolTable(List<? extends Declaration> declarations) {
+        for (Declaration declaration: declarations) {
+            symbolTable.put(declaration.getName(), declaration);
         }
-        for (Variable variable: variables) {
-            symbolTable.put(variable.getName(), variable);
-        }
-        for (TypeDeclaration type: types) {
-            symbolTable.put(type.getName(), type);
-        }
+    }
+
+    private <T> List<T> symbolsByType(Class<T> aClass) {
+        return symbolTable.values().stream()
+                .filter(e -> e.getClass().equals(aClass))
+                .map(e -> (T) e)
+                .collect(Collectors.toList());
     }
 }
