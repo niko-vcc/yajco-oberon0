@@ -2,18 +2,16 @@ package yajco.oberon0.model;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Declarations {
-    private Map<String, Declaration> symbolTable = new HashMap<>();
+public class Declarations extends HashMap<String, Declaration> {
 
     public Declarations(ConstantDeclarations constants,
                         TypeDeclarations types,
                         VariableDeclarations variables) {
-        addToSymbolTable(constants);
-        addToSymbolTable(types);
-        addToSymbolTable(variables);
+        addDeclarations(constants);
+        addDeclarations(types);
+        addDeclarations(variables);
     }
 
     public ConstantDeclarations getConstants() {
@@ -28,18 +26,14 @@ public class Declarations {
         return new TypeDeclarations(symbolsByType(TypeDeclaration.class));
     }
 
-    public Declaration getDeclaration(String name) {
-        return symbolTable.get(name);
-    }
-
-    private void addToSymbolTable(List<? extends Declaration> declarations) {
+    private void addDeclarations(List<? extends Declaration> declarations) {
         for (Declaration declaration: declarations) {
-            symbolTable.put(declaration.getName(), declaration);
+            this.put(declaration.getName(), declaration);
         }
     }
 
     private <T> List<T> symbolsByType(Class<T> aClass) {
-        return symbolTable.values().stream()
+        return this.values().stream()
                 .filter(e -> e.getClass().equals(aClass))
                 .map(e -> (T) e)
                 .collect(Collectors.toList());

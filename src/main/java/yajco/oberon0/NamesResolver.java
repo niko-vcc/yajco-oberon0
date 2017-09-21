@@ -36,7 +36,7 @@ public class NamesResolver extends Visitor<Declarations> {
             reference.setDeclaration(constant);
             return;
         }
-        Declaration declaration = declarations.getDeclaration(name);
+        Declaration declaration = declarations.get(name);
         if (declaration == null) {
             errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
         }
@@ -57,7 +57,7 @@ public class NamesResolver extends Visitor<Declarations> {
     @Override
     protected void visitAssignment(Assignment assignment, Declarations declarations) {
         String name = assignment.getName();
-        Declaration declaration = declarations.getDeclaration(name);
+        Declaration declaration = declarations.get(name);
         if (declaration == null) {
             errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
         } else if (!(declaration instanceof Variable)) {
@@ -76,7 +76,7 @@ public class NamesResolver extends Visitor<Declarations> {
         } else if (name.equals("BOOLEAN")) {
             reference.setReferencedType(PrimitiveType.BOOLEAN);
         } else {
-            Declaration declaration = declarations.getDeclaration(name);
+            Declaration declaration = declarations.get(name);
             if (!(declaration instanceof TypeDeclaration)) {
                 errors.add(new ParserError(String.format("'%s' is not a type", name)));
             } else {
