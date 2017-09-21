@@ -80,7 +80,7 @@ public class TypeCheckerTest {
 
     @Test
     public void customTypeAssignment() throws ParseException {
-        Module module = parser.parse("MODULE Sample; VAR x: T; TYPE T = INTEGER; BEGIN x := 1 END Sample.");
+        Module module = parser.parse("MODULE Sample; TYPE T = INTEGER; VAR x: T; BEGIN x := 1 END Sample.");
         NamesResolver.resolve(module);
         List<ParserError> errors = TypeChecker.check(module);
         assertThat(errors, hasSize(0));

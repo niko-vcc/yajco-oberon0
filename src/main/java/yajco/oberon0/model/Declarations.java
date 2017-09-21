@@ -10,11 +10,11 @@ public class Declarations {
     private Map<String, Declaration> symbolTable = new HashMap<>();
 
     public Declarations(ConstantDeclarations constants,
-                        VariableDeclarations variables,
-                        TypeDeclarations types) {
+                        TypeDeclarations types,
+                        VariableDeclarations variables) {
         this.constants = constants;
-        this.variables = variables;
         this.types = types;
+        this.variables = variables;
         fillSymbolTable(constants, variables, types);
     }
 
