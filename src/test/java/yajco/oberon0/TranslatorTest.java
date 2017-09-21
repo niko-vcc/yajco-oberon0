@@ -6,6 +6,9 @@ import yajco.oberon0.model.Module;
 import yajco.oberon0.model.parser.LALRModuleParser;
 import yajco.oberon0.model.parser.ParseException;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
 
@@ -74,6 +77,8 @@ public class TranslatorTest {
     private String translate(String input) throws ParseException {
         Module module = parser.parse(input);
         NamesResolver.resolve(module);
-        return CCodeGenerator.generate(module);
+        StringWriter writer = new StringWriter();
+        CCodeGenerator.generate(module, new PrintWriter(writer));
+        return writer.toString();
     }
 }
