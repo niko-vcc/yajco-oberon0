@@ -108,7 +108,7 @@ public class L2Test {
         ForStatement forStmt = (ForStatement) module.getStatements().get(0);
         Variable counter = forStmt.getAssignment().getVariable();
 
-        L2Transformer.transform(module);
+        L2Transformation.transform(module);
         assertThat(module.getStatements().get(0), is(forStmt.getAssignment()));
         assertThat(module.getStatements().get(1), instanceOf(WhileStatement.class));
         WhileStatement whileStmt = (WhileStatement) module.getStatements().get(1);
@@ -133,7 +133,7 @@ public class L2Test {
         CaseStatement caseStmt = (CaseStatement) module.getStatements().get(0);
         Expression key = caseStmt.getExpression();
 
-        L2Transformer.transform(module);
+        L2Transformation.transform(module);
         assertThat(module.getStatements().get(0), instanceOf(IfStatement.class));
         IfStatement ifStmt = (IfStatement) module.getStatements().get(0);
         assertThat(((Equals) ifStmt.getCondition()).getLeft(), is(key));

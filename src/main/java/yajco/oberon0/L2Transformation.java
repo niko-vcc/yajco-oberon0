@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Exclude
-public class L2Transformer extends Visitor<Object> {
+public class L2Transformation extends Visitor<Object> {
     public static void transform(Module module) {
-        new L2Transformer().visit(module, null);
+        new L2Transformation().visit(module, null);
     }
 
     @Override
