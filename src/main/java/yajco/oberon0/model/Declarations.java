@@ -1,10 +1,13 @@
 package yajco.oberon0.model;
 
+import yajco.oberon0.SymbolTable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Declarations extends HashMap<String, Declaration> {
+public class Declarations extends HashMap<String, Declaration>
+        implements SymbolTable {
 
     public Declarations(ConstantDeclarations constants,
                         TypeDeclarations types,
@@ -26,16 +29,26 @@ public class Declarations extends HashMap<String, Declaration> {
         return new TypeDeclarations(symbolsByType(TypeDeclaration.class));
     }
 
-    private void addDeclarations(List<? extends Declaration> declarations) {
+    protected void addDeclarations(List<? extends Declaration> declarations) {
         for (Declaration declaration: declarations) {
             this.put(declaration.getName(), declaration);
         }
     }
 
-    private <T> List<T> symbolsByType(Class<T> aClass) {
+    protected <T> List<T> symbolsByType(Class<T> aClass) {
         return this.values().stream()
                 .filter(e -> e.getClass().equals(aClass))
                 .map(e -> (T) e)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean containsKey(String name) {
+        return super.containsKey(name);
+    }
+
+    @Override
+    public Declaration get(String name) {
+        return super.get(name);
     }
 }

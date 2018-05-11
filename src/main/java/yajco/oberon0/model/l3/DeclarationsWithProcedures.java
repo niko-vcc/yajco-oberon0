@@ -9,7 +9,6 @@ import yajco.oberon0.model.VariableDeclarations;
 import java.util.List;
 
 public class DeclarationsWithProcedures extends Declarations {
-    private final List<Procedure> procedures;
 
     public DeclarationsWithProcedures(
             ConstantDeclarations constants,
@@ -17,10 +16,10 @@ public class DeclarationsWithProcedures extends Declarations {
             VariableDeclarations variables,
             @Range(minOccurs = 1) List<Procedure> procedures) {
         super(constants, types, variables);
-        this.procedures = procedures;
+        this.addDeclarations(procedures);
     }
 
     public List<Procedure> getProcedures() {
-        return procedures;
+        return this.symbolsByType(Procedure.class);
     }
 }

@@ -106,7 +106,7 @@ public class L2Test {
               + "END Test.");
         NamesResolver.resolve(module);
         ForStatement forStmt = (ForStatement) module.getStatements().get(0);
-        Variable counter = forStmt.getAssignment().getVariable();
+        Storage counter = forStmt.getAssignment().getVariable();
 
         L2Transformation.transform(module);
         assertThat(module.getStatements().get(0), is(forStmt.getAssignment()));

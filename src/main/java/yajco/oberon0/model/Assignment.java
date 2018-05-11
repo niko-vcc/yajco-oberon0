@@ -5,7 +5,7 @@ import yajco.annotation.Exclude;
 
 public class Assignment extends Statement {
     private String name;
-    private Variable variable;
+    private Storage variable;
     private Expression expression;
 
     public Assignment(
@@ -17,7 +17,7 @@ public class Assignment extends Statement {
 
     @Exclude
     public Assignment(
-            Variable variable,
+            Storage variable,
             @Before(":=") Expression expression) {
         this.name = variable.getName();
         this.variable = variable;
@@ -28,11 +28,11 @@ public class Assignment extends Statement {
         return name;
     }
 
-    public Variable getVariable() {
+    public Storage getVariable() {
         return variable;
     }
 
-    public void setVariable(Variable variable) {
+    public void setVariable(Storage variable) {
         this.variable = variable;
     }
 

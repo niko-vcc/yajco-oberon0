@@ -4,7 +4,7 @@ package yajco.oberon0.model;
 import yajco.annotation.After;
 import yajco.annotation.Before;
 
-public class TypeDeclaration extends Declaration {
+public class TypeDeclaration extends AbstractDeclaration {
     private final Type type;
 
     @After(";")

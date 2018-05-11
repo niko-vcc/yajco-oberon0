@@ -1,6 +1,6 @@
 package yajco.oberon0.model;
 
-public class Variable extends Declaration {
+public class Variable extends AbstractDeclaration implements Storage {
     private Type type;
 
     public Variable(String name) {
@@ -11,7 +11,7 @@ public class Variable extends Declaration {
         return type;
     }
 
-    void setType(Type type) {
+    public void setType(Type type) {
         this.type = type;
     }
 }

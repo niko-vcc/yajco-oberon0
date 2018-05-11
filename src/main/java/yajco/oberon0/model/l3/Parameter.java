@@ -1,10 +1,11 @@
 package yajco.oberon0.model.l3;
 
 import yajco.annotation.Exclude;
-import yajco.oberon0.model.Declaration;
+import yajco.oberon0.model.AbstractDeclaration;
+import yajco.oberon0.model.Storage;
 import yajco.oberon0.model.Type;
 
-public class Parameter extends Declaration {
+public class Parameter extends AbstractDeclaration implements Storage {
     private boolean variable;
     private Type type;
 
@@ -13,10 +14,10 @@ public class Parameter extends Declaration {
     }
 
     @Exclude
-    public Parameter(String name, Type type, boolean variable) {
+    public Parameter(String name, Type type, boolean isVariable) {
         super(name);
         this.type = type;
-        this.variable = variable;
+        this.variable = isVariable;
     }
 
     @Override

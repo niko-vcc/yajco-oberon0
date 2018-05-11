@@ -2,13 +2,13 @@ package yajco.oberon0.model.l3;
 
 import yajco.annotation.After;
 import yajco.annotation.Before;
+import yajco.annotation.Exclude;
 import yajco.annotation.Token;
-import yajco.oberon0.model.Declaration;
-import yajco.oberon0.model.Declarations;
-import yajco.oberon0.model.StatementSequence;
-import yajco.oberon0.model.Type;
+import yajco.oberon0.model.*;
 
-public class Procedure extends Declaration {
+import java.util.Collection;
+
+public class Procedure extends AbstractDeclaration {
     private final FormalParameters parameters;
     private final Declarations declarations;
     private final StatementSequence statements;
@@ -38,6 +38,14 @@ public class Procedure extends Declaration {
         if (!name.equals(repeatedName)) {
             throw new RuntimeException("Unmatching procedure name at the end.");
         }
+    }
+
+    @Exclude
+    public Procedure(String name, Collection<Parameter> parameters) {
+        super(name);
+        this.parameters = new FormalParameters(parameters);
+        declarations = null;
+        statements = null;
     }
 
     @Override

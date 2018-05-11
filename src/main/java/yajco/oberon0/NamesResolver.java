@@ -11,10 +11,10 @@ import static yajco.oberon0.model.Boolean.FALSE;
 import static yajco.oberon0.model.Boolean.TRUE;
 
 @Exclude
-public class NamesResolver extends Visitor<Declarations> {
-    private List<ParserError> errors = new ArrayList<>();
+public class NamesResolver extends Visitor<SymbolTable> {
+    protected List<ParserError> errors = new ArrayList<>();
 
-    private NamesResolver() {
+    protected NamesResolver() {
     }
 
     public static List<ParserError> resolve(Module module) {
@@ -24,12 +24,12 @@ public class NamesResolver extends Visitor<Declarations> {
     }
 
     @Override
-    protected void visitModule(Module module, Declarations __) {
+    protected void visitModule(Module module, SymbolTable __) {
         super.visitModule(module, module.getDeclarations());
     }
 
     @Override
-    protected void visitReference(Reference reference, Declarations declarations) {
+    protected void visitReference(Reference reference, SymbolTable declarations) {
         String name = reference.getName();
         Constant constant = checkBuiltinConstants(name);
         if (constant != null) {
@@ -43,7 +43,7 @@ public class NamesResolver extends Visitor<Declarations> {
         reference.setDeclaration(declaration);
     }
 
-    private Constant checkBuiltinConstants(String name) {
+    protected Constant checkBuiltinConstants(String name) {
         switch (name) {
             case "TRUE":
                 return new Constant(name, TRUE);
@@ -55,7 +55,7 @@ public class NamesResolver extends Visitor<Declarations> {
     }
 
     @Override
-    protected void visitAssignment(Assignment assignment, Declarations declarations) {
+    protected void visitAssignment(Assignment assignment, SymbolTable declarations) {
         String name = assignment.getName();
         Declaration declaration = declarations.get(name);
         if (declaration == null) {
@@ -69,7 +69,7 @@ public class NamesResolver extends Visitor<Declarations> {
     }
 
     @Override
-    protected void visitTypeReference(TypeReference reference, Declarations declarations) {
+    protected void visitTypeReference(TypeReference reference, SymbolTable declarations) {
         String name = reference.getName();
         if (name.equals("INTEGER")) {
             reference.setReferencedType(PrimitiveType.INTEGER);

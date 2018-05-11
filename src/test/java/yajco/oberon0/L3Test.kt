@@ -1,10 +1,14 @@
 package yajco.oberon0
 
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
+import yajco.oberon0.model.Assignment
+import yajco.oberon0.model.Storage
 import yajco.oberon0.model.l3.DeclarationsWithProcedures
+import yajco.oberon0.model.l3.Procedure
 import yajco.oberon0.model.l3.ProcedureCall
 import yajco.oberon0.model.parser.LALRModuleParser
 
@@ -41,6 +45,17 @@ class L3Test {
         val declarations = module.declarations as DeclarationsWithProcedures
         assertThat(declarations.procedures.size, equalTo(1))
         assertThat(declarations.procedures[0].name, equalTo("Hello"))
+    }
+
+    @Test
+    fun gettingProcedureByName() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  PROCEDURE Hello;
+                  |  END Hello;
+                  |END Test.""".trimMargin())
+        val declarations = module.declarations as DeclarationsWithProcedures
+        assertThat(declarations["Hello"], notNullValue())
     }
 
     @Test
@@ -90,5 +105,54 @@ class L3Test {
         assertThat(parameters[1].isVariable, equalTo(false))
         assertThat(parameters[2].name, equalTo("z"))
         assertThat(parameters[2].isVariable, equalTo(true))
+    }
+
+    @Test
+    fun resolutionOfProcedureName() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  PROCEDURE Hello;
+                  |  END Hello;
+                  |
+                  |BEGIN
+                  |  Hello
+                  |END Test.""".trimMargin())
+        val errors = L3NamesResolver.resolve(module)
+        val procedure = module.declarations["Hello"]
+        assertThat(procedure?.name, equalTo("Hello"))  // Just to be sure
+        val statement = module.statements[0]
+        assertThat((statement as ProcedureCall).procedure, equalTo(procedure))
+        assertThat(errors, equalTo(emptyList()))
+    }
+
+    @Test
+    fun nameResolutionInProcedure() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  CONST a = 5;
+                  |  VAR b : INTEGER;
+                  |  PROCEDURE Multiply (x, y: INTEGER; VAR z: INTEGER);
+                  |  BEGIN
+                  |    z := x * y
+                  |  END Multiply;
+                  |BEGIN
+                  |  Multiply(a, 10, b)
+                  |END Test.""".trimMargin())
+        val errors = L3NamesResolver.resolve(module)
+        assertThat(errors, equalTo(emptyList()))
+        val procedure = module.declarations["Multiply"] as Procedure
+        val assignment = procedure.statements[0] as Assignment
+        assertThat(assignment.variable, equalTo(procedure.parameters[2] as Storage))
+    }
+
+    @Test
+    fun builtinProcedures() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |BEGIN
+                  |  WriteLn
+                  |END Test.""".trimMargin())
+        val errors = L3NamesResolver.resolve(module)
+        assertThat(errors, equalTo(emptyList()))
     }
 }

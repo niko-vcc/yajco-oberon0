@@ -10,4 +10,9 @@ public class ParserError {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        return "Parse error: " + message;
+    }
 }

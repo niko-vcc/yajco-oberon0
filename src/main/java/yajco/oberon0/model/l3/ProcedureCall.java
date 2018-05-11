@@ -7,14 +7,16 @@ import yajco.annotation.Separator;
 import yajco.oberon0.model.Expression;
 import yajco.oberon0.model.Statement;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProcedureCall extends Statement {
     private String name;
     private List<Expression> actualParameters;
+    private Procedure procedure;
 
     public ProcedureCall(String name) {
-        this.name = name;
+        this(name, Collections.emptyList());
     }
 
     public ProcedureCall(String name,
@@ -30,5 +32,13 @@ public class ProcedureCall extends Statement {
 
     public List<Expression> getActualParameters() {
         return actualParameters;
+    }
+
+    public Procedure getProcedure() {
+        return procedure;
+    }
+
+    public void setProcedure(Procedure procedure) {
+        this.procedure = procedure;
     }
 }

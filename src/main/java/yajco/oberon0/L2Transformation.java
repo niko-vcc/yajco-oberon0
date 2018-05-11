@@ -48,7 +48,7 @@ public class L2Transformation extends Visitor<Object> {
     }
 
     private List<Statement> desugarFor(ForStatement forStatement) {
-        Variable counter = forStatement.getAssignment().getVariable();
+        Storage counter = forStatement.getAssignment().getVariable();
         ArrayList<Statement> statements = new ArrayList<>();
         statements.add(forStatement.getAssignment());
         Expression condition = new LessEquals(new Reference(counter), forStatement.getTarget());

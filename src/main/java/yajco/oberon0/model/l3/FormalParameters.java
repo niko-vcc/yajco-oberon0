@@ -1,11 +1,9 @@
 package yajco.oberon0.model.l3;
 
-import yajco.annotation.After;
-import yajco.annotation.Before;
-import yajco.annotation.Range;
-import yajco.annotation.Separator;
+import yajco.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +19,11 @@ public class FormalParameters extends ArrayList<Parameter> {
         for (ParametersGroup group : groups) {
             addAll(group.getParameters());
         }
+    }
+
+    @Exclude
+    public FormalParameters(Collection<Parameter> parameters) {
+        addAll(parameters);
     }
 
     public List<ParametersGroup> getGroups() {
