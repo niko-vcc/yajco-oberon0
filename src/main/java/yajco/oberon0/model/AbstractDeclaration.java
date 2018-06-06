@@ -12,4 +12,7 @@ public abstract class AbstractDeclaration implements Declaration {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -1,7 +1,6 @@
 package yajco.oberon0
 
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -154,5 +153,25 @@ class L3Test {
                   |END Test.""".trimMargin())
         val errors = L3NamesResolver.resolve(module)
         assertThat(errors, equalTo(emptyList()))
+    }
+
+    @Test
+    fun liftNestedProcedures() {
+        val module = parser!!.parse(
+                """MODULE Foo;
+                  |  PROCEDURE Bar;
+                  |    PROCEDURE Baz;
+                  |    END Baz;
+                  |  BEGIN
+                  |    Baz
+                  |  END Bar;
+                  |BEGIN
+                  |  Bar
+                  |END Foo.""".trimMargin())
+        L3NamesResolver.resolve(module)
+        L3Transformation.liftProcedures(module)
+
+        assertThat(module.declarations, hasKey("BarBaz"))
+        assertThat((module.declarations["Bar"] as Procedure).declarations, not(hasKey("Baz")))
     }
 }
