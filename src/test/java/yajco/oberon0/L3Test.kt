@@ -3,6 +3,7 @@ package yajco.oberon0
 import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import yajco.oberon0.model.Assignment
 import yajco.oberon0.model.Storage
@@ -173,5 +174,60 @@ class L3Test {
 
         assertThat(module.declarations, hasKey("BarBaz"))
         assertThat((module.declarations["Bar"] as Procedure).declarations, not(hasKey("Baz")))
+    }
+
+    @Test
+    fun typeCheckProcedure() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  CONST a = 5;
+                  |  VAR b : INTEGER;
+                  |  PROCEDURE Multiply (x, y: INTEGER; VAR z: INTEGER);
+                  |  BEGIN
+                  |    z := x * y
+                  |  END Multiply;
+                  |BEGIN
+                  |  Multiply(a, 10, b)
+                  |END Test.""".trimMargin())
+        L3NamesResolver.resolve(module)
+        val errors = L3TypeChecker.check(module)
+        assertThat(errors, equalTo(emptyList()))
+    }
+
+    @Test
+    fun typeCheckInvalidNumberOfParameters() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |BEGIN
+                  |  WriteLn(10)
+                  |END Test.""".trimMargin())
+        L3NamesResolver.resolve(module)
+        val errors = L3TypeChecker.check(module)
+        assertThat(errors, hasSize(1))
+    }
+
+    @Test
+    @Ignore
+    fun translateProceduresToC() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  CONST a = 5;
+                  |  VAR b, c : INTEGER;
+                  |  PROCEDURE Multiply (x, y: INTEGER; VAR z: INTEGER);
+                  |  BEGIN
+                  |    z := x * y
+                  |  END Multiply;
+                  |BEGIN
+                  |  Read(b);
+                  |  Multiply(a, b, c);
+                  |  Write(c);
+                  |  WriteLn;
+                  |  WriteHex(c);
+                  |  WriteLn
+                  |END Test.""".trimMargin())
+        val errors = L3NamesResolver.resolve(module)
+        assertThat(errors, equalTo(emptyList()))
+        L3Transformation.liftProcedures(module)
+        // TODO
     }
 }

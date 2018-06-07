@@ -18,6 +18,9 @@ public class PrimitiveType extends Type {
     }
 
     public boolean matches(Type that) {
+        while (that instanceof TypeReference) {
+            that = ((TypeReference) that).getReferencedType();
+        }
         return this == that;
     }
 }

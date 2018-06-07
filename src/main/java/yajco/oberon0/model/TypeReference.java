@@ -19,4 +19,13 @@ public class TypeReference extends Type {
     public void setReferencedType(Type referencedType) {
         this.referencedType = referencedType;
     }
+
+    public Type getReferencedType() {
+        return referencedType;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
