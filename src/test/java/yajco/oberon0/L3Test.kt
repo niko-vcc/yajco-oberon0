@@ -207,7 +207,18 @@ class L3Test {
     }
 
     @Test
-    @Ignore
+    fun typeCheckInvalidParameterType() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |BEGIN
+                  |  Write(TRUE)
+                  |END Test.""".trimMargin())
+        L3NamesResolver.resolve(module)
+        val errors = L3TypeChecker.check(module)
+        assertThat(errors, hasSize(1))
+    }
+
+    @Test
     fun translateProceduresToC() {
         val module = parser!!.parse(
                 """MODULE Test;
@@ -225,8 +236,10 @@ class L3Test {
                   |  WriteHex(c);
                   |  WriteLn
                   |END Test.""".trimMargin())
-        val errors = L3NamesResolver.resolve(module)
-        assertThat(errors, equalTo(emptyList()))
+        val nameErrors = L3NamesResolver.resolve(module)
+        assertThat(nameErrors, equalTo(emptyList()))
+        val typeErrors = L3TypeChecker.check(module)
+        assertThat(typeErrors, equalTo(emptyList()))
         L3Transformation.liftProcedures(module)
         // TODO
     }
