@@ -11,6 +11,9 @@ import yajco.oberon0.model.l3.DeclarationsWithProcedures
 import yajco.oberon0.model.l3.Procedure
 import yajco.oberon0.model.l3.ProcedureCall
 import yajco.oberon0.model.parser.LALRModuleParser
+import yajco.oberon0.model.parser.ParseException
+import java.io.PrintWriter
+import java.io.StringWriter
 
 class L3Test {
     private var parser: LALRModuleParser? = null
@@ -220,7 +223,7 @@ class L3Test {
 
     @Test
     fun translateProceduresToC() {
-        val module = parser!!.parse(
+        assertThat(translate(
                 """MODULE Test;
                   |  CONST a = 5;
                   |  VAR b, c : INTEGER;
@@ -235,12 +238,35 @@ class L3Test {
                   |  WriteLn;
                   |  WriteHex(c);
                   |  WriteLn
-                  |END Test.""".trimMargin())
-        val nameErrors = L3NamesResolver.resolve(module)
-        assertThat(nameErrors, equalTo(emptyList()))
-        val typeErrors = L3TypeChecker.check(module)
-        assertThat(typeErrors, equalTo(emptyList()))
+                  |END Test.""".trimMargin()),
+            equalToIgnoringWhiteSpace(
+                """#include "oberon.h";
+                  |
+                  |void Multiply(int x, int y, int *z) {
+                  |  *z = (x * y);
+                  |}
+                  |
+                  |void main() {
+                  |  const int a = 5;
+                  |  int b;
+                  |  int c;
+                  |  Read(&b);
+                  |  Multiply(a, b, &c);
+                  |  Write(c);
+                  |  WriteLn();
+                  |  WriteHex(c);
+                  |  WriteLn();
+                  |}
+                """.trimMargin()))
+    }
+
+    @Throws(ParseException::class)
+    private fun translate(input: String): String {
+        val module = parser!!.parse(input)
+        L3NamesResolver.resolve(module)
         L3Transformation.liftProcedures(module)
-        // TODO
+        val writer = StringWriter()
+        L3CodeGenerator.generate(module, PrintWriter(writer))
+        return writer.toString()
     }
 }
