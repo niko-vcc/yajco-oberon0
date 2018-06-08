@@ -29,6 +29,13 @@ public class CCodeGenerator extends Visitor<PrintWriter> {
     }
 
     @Override
+    protected void visitConstant(Constant constant, PrintWriter writer) {
+        writer.printf(String.format("%s %s = ", "const int", constant.getName()));
+        visit(constant.getExpression(), writer);
+        writer.print(";\n");
+    }
+
+    @Override
     protected void visitAssignment(Assignment assignment, PrintWriter writer) {
         writer.printf(String.format("%s = ", assignment.getVariable().getName()));
         visit(assignment.getExpression(), writer);
