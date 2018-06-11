@@ -7,8 +7,8 @@ import org.junit.Before
 import org.junit.Test
 import yajco.oberon0.model.*
 import yajco.oberon0.model.Number
-import yajco.oberon0.model.l4.ArrayType
-import yajco.oberon0.model.l4.RecordType
+import yajco.oberon0.model.l3.ProcedureCall
+import yajco.oberon0.model.l4.*
 import yajco.oberon0.model.parser.LALRModuleParser
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -40,13 +40,31 @@ class L4Test {
         assertThat(recordType.fields.size, equalTo(3))
     }
 
+    @Test
+    fun arrayIndexingInReference() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR a: ARRAY 32 OF INTEGER;
+                  |BEGIN
+                  |  Write(a[0])
+                  |END Test.""".trimMargin())
+        val procedureCall = module.statements[0] as ProcedureCall
+        assertThat(procedureCall.actualParameters[0], instanceOf(ReferenceWithSelector::class.java))
+        val reference = procedureCall.actualParameters[0] as ReferenceWithSelector
+        assertThat(reference.selectors[0], instanceOf(IndexSelector::class.java))
+    }
 
-    private fun translate(input: String): String {
-        val module = parser!!.parse(input)
-        L3NamesResolver.resolve(module)
-        L3Transformation.liftProcedures(module)
-        val writer = StringWriter()
-        L3CodeGenerator.generate(module, PrintWriter(writer))
-        return writer.toString()
+    @Test
+    fun fieldSelectorInReference() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR r: RECORD a, b: INTEGER; c: BOOLEAN END;
+                  |BEGIN
+                  |  Write(r.a)
+                  |END Test.""".trimMargin())
+        val procedureCall = module.statements[0] as ProcedureCall
+        assertThat(procedureCall.actualParameters[0], instanceOf(ReferenceWithSelector::class.java))
+        val reference = procedureCall.actualParameters[0] as ReferenceWithSelector
+        assertThat(reference.selectors[0], instanceOf(FieldSelector::class.java))
     }
 }
