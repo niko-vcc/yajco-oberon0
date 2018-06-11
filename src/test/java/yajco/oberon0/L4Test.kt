@@ -37,6 +37,7 @@ class L4Test {
         val recordVar = module.declarations["r"] as Variable
         assertThat(recordVar.type, instanceOf(RecordType::class.java))
         val recordType = recordVar.type as RecordType
+        assertThat(recordType.fields.size, equalTo(3))
     }
 
 

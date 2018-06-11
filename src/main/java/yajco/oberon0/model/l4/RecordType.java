@@ -26,6 +26,10 @@ public class RecordType extends Type {
         }
     }
 
+    public Map<String, Variable> getFields() {
+        return fields;
+    }
+
     public List<FieldList> getFieldLists() {
         return fields.values().stream()
                 .map(v -> new FieldList(singletonList(v), v.getType()))
