@@ -3,7 +3,6 @@ package yajco.oberon0
 import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import yajco.oberon0.model.Assignment
 import yajco.oberon0.model.Storage
