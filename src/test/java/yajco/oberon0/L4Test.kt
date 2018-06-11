@@ -67,4 +67,30 @@ class L4Test {
         val reference = procedureCall.actualParameters[0] as ReferenceWithSelector
         assertThat(reference.selectors[0], instanceOf(FieldSelector::class.java))
     }
+
+    @Test
+    fun arrayIndexingInAssignment() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR a: ARRAY 32 OF INTEGER;
+                  |BEGIN
+                  |  a[0] := 1
+                  |END Test.""".trimMargin())
+        assertThat(module.statements[0], instanceOf(AssignmentWithSelector::class.java))
+        val assignment = module.statements[0] as AssignmentWithSelector
+        assertThat(assignment.selectors[0], instanceOf(IndexSelector::class.java))
+    }
+
+    @Test
+    fun fieldSelectorInAssignment() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR r: RECORD a, b: INTEGER; c: BOOLEAN END;
+                  |BEGIN
+                  |  r.a := 1
+                  |END Test.""".trimMargin())
+        assertThat(module.statements[0], instanceOf(AssignmentWithSelector::class.java))
+        val assignment = module.statements[0] as AssignmentWithSelector
+        assertThat(assignment.selectors[0], instanceOf(FieldSelector::class.java))
+    }
 }
