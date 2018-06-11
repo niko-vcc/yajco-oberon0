@@ -18,7 +18,7 @@ public class Assignment extends Statement {
     @Exclude
     public Assignment(
             Storage variable,
-            @Before(":=") Expression expression) {
+            Expression expression) {
         this.name = variable.getName();
         this.variable = variable;
         this.expression = expression;
