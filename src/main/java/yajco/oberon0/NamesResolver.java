@@ -41,6 +41,7 @@ public class NamesResolver extends Visitor<SymbolTable> {
             errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
         }
         reference.setDeclaration(declaration);
+        super.visitReference(reference, declarations);
     }
 
     protected Constant checkBuiltinConstants(String name) {

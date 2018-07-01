@@ -93,4 +93,61 @@ class L4Test {
         val assignment = module.statements[0] as AssignmentWithSelector
         assertThat(assignment.selectors[0], instanceOf(FieldSelector::class.java))
     }
+
+    @Test
+    fun fieldNameResolution() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR r: RECORD a, b: INTEGER END;
+                  |BEGIN
+                  |  r.a := 1
+                  |END Test.""".trimMargin())
+        L4NamesResolver.resolve(module)
+        val record = module.declarations["r"].type as RecordType
+        val assignment = module.statements[0] as AssignmentWithSelector
+        assertThat((assignment.selectors[0] as FieldSelector).field, equalTo(record.fields["a"]))
+    }
+
+    @Test
+    fun complexFieldNameResolution() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR r: RECORD
+                  |    a: ARRAY 10 OF RECORD
+                  |      b: INTEGER
+                  |    END
+                  |  END;
+                  |BEGIN
+                  |  r.a[1].b := 1
+                  |END Test.""".trimMargin())
+        L4NamesResolver.resolve(module)
+        val record1 = module.declarations["r"].type as RecordType
+        val array = record1.fields["a"]!!.type as ArrayType
+        val record2 = array.elementType as RecordType
+        val assignment = module.statements[0] as AssignmentWithSelector
+        assertThat((assignment.selectors[0] as FieldSelector).field, equalTo(record1.fields["a"]))
+        assertThat((assignment.selectors[2] as FieldSelector).field, equalTo(record2.fields["b"]))
+    }
+
+    @Test
+    fun complexFieldReferenceNameResolution() {
+        val module = parser!!.parse(
+                """MODULE Test;
+                  |  VAR r: RECORD
+                  |    a: ARRAY 10 OF RECORD
+                  |      b: INTEGER
+                  |    END
+                  |  END;
+                  |BEGIN
+                  |  Write(r.a[1].b)
+                  |END Test.""".trimMargin())
+        L4NamesResolver.resolve(module)
+        val record1 = module.declarations["r"].type as RecordType
+        val array = record1.fields["a"]!!.type as ArrayType
+        val record2 = array.elementType as RecordType
+        val writeCall = module.statements[0] as ProcedureCall
+        val actualParameter = writeCall.actualParameters[0] as ReferenceWithSelector
+        assertThat((actualParameter.selectors[0] as FieldSelector).field, equalTo(record1.fields["a"]))
+        assertThat((actualParameter.selectors[2] as FieldSelector).field, equalTo(record2.fields["b"]))
+    }
 }

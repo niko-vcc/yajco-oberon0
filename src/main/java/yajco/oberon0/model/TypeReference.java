@@ -16,6 +16,11 @@ public class TypeReference extends Type {
         return this.referencedType.matches(that);
     }
 
+    @Override
+    public Type getRealType() {
+        return referencedType;
+    }
+
     public void setReferencedType(Type referencedType) {
         this.referencedType = referencedType;
     }
