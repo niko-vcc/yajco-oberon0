@@ -4,36 +4,30 @@ import yajco.annotation.Before;
 import yajco.annotation.Exclude;
 
 public class Assignment extends Statement {
-    private String name;
-    private Storage variable;
+    private Reference reference;
     private Expression expression;
 
     public Assignment(
-            String name,
+            Reference reference,
             @Before(":=") Expression expression) {
-        this.name = name;
+        this.reference = reference;
         this.expression = expression;
     }
 
     @Exclude
     public Assignment(
-            Storage variable,
+            Declaration variable,
             Expression expression) {
-        this.name = variable.getName();
-        this.variable = variable;
+        this.reference = new Reference(variable);
         this.expression = expression;
     }
 
-    public String getName() {
-        return name;
+    public Reference getReference() {
+        return reference;
     }
 
-    public Storage getVariable() {
-        return variable;
-    }
-
-    public void setVariable(Storage variable) {
-        this.variable = variable;
+    public Declaration getVariable() {
+        return reference.getDeclaration();
     }
 
     public Expression getExpression() {

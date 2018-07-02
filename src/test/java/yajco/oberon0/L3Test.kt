@@ -5,7 +5,7 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import yajco.oberon0.model.Assignment
-import yajco.oberon0.model.Storage
+import yajco.oberon0.model.Declaration
 import yajco.oberon0.model.l3.DeclarationsWithProcedures
 import yajco.oberon0.model.l3.Procedure
 import yajco.oberon0.model.l3.ProcedureCall
@@ -144,7 +144,7 @@ class L3Test {
         assertThat(errors, equalTo(emptyList()))
         val procedure = module.declarations["Multiply"] as Procedure
         val assignment = procedure.statements[0] as Assignment
-        assertThat(assignment.variable, equalTo(procedure.parameters[2] as Storage))
+        assertThat(assignment.variable, equalTo(procedure.parameters[2] as Declaration))
     }
 
     @Test

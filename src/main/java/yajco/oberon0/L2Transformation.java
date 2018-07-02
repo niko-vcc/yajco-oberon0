@@ -48,12 +48,12 @@ public class L2Transformation extends Visitor<Object> {
     }
 
     private List<Statement> desugarFor(ForStatement forStatement) {
-        Storage counter = forStatement.getAssignment().getVariable();
+        Reference counter = forStatement.getAssignment().getReference();
         ArrayList<Statement> statements = new ArrayList<>();
         statements.add(forStatement.getAssignment());
-        Expression condition = new LessEquals(new Reference(counter), forStatement.getTarget());
+        Expression condition = new LessEquals(counter, forStatement.getTarget());
         StatementSequence body = forStatement.getBody();
-        body.add(new Assignment(counter, new Add(new Reference(counter), new Number(1))));
+        body.add(new Assignment(counter, new Add(counter, new Number(1))));
         statements.add(new WhileStatement(condition, body));
         return statements;
     }

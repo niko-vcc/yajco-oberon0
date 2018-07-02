@@ -21,7 +21,7 @@ public class TypeChecker extends Visitor<Object> {
     @Override
     protected void visitAssignment(Assignment assignment, Object o) {
         super.visitAssignment(assignment, o);
-        if (!assignment.getVariable().getType().matches(
+        if (!assignment.getReference().getType().matches(
                 assignment.getExpression().getType())) {
             errors.add(new ParserError("Not matching types in assignment."));
         }

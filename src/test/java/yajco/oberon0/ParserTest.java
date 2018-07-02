@@ -111,7 +111,7 @@ public class ParserTest {
         assertThat(module.getStatements().size(), is(1));
         assertThat(module.getStatements().get(0), instanceOf(Assignment.class));
         Assignment assignment = (Assignment) module.getStatements().get(0);
-        assertThat(assignment.getName(), is("x"));
+        assertThat(assignment.getReference().getName(), is("x"));
     }
 
     @Test

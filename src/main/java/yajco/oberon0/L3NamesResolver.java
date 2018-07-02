@@ -57,21 +57,4 @@ public class L3NamesResolver extends NamesResolver {
         }
         return declarations;
     }
-
-    @Override
-    protected void visitAssignment(Assignment assignment, SymbolTable declarations) {
-        String name = assignment.getName();
-        Declaration declaration = declarations.get(name);
-        if (declaration == null) {
-            errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
-        } else if (!(declaration instanceof Variable) && !(declaration instanceof Parameter)) {
-            errors.add(new ParserError(String.format("Assignment to nonvariable '%s'", name)));
-        } else {
-            assignment.setVariable((Storage) declaration);
-        }
-        if (assignment.getExpression() != null && enterVisit(assignment.getExpression())) {
-            visitExpression(assignment.getExpression(), declarations);
-            exitVisit(assignment.getExpression());
-        }
-    }
 }

@@ -56,20 +56,6 @@ public class NamesResolver extends Visitor<SymbolTable> {
     }
 
     @Override
-    protected void visitAssignment(Assignment assignment, SymbolTable declarations) {
-        String name = assignment.getName();
-        Declaration declaration = declarations.get(name);
-        if (declaration == null) {
-            errors.add(new ParserError(String.format("Undefined symbol '%s'", name)));
-        } else if (!(declaration instanceof Variable)) {
-            errors.add(new ParserError(String.format("Assignment to nonvariable '%s'", name)));
-        } else {
-            assignment.setVariable((Variable) declaration);
-        }
-        super.visitAssignment(assignment, declarations);
-    }
-
-    @Override
     protected void visitTypeReference(TypeReference reference, SymbolTable declarations) {
         String name = reference.getName();
         if (name.equals("INTEGER")) {

@@ -2,15 +2,23 @@ package yajco.oberon0.model.l4;
 
 import yajco.annotation.Before;
 import yajco.annotation.Token;
+import yajco.oberon0.model.Reference;
+import yajco.oberon0.model.Type;
 import yajco.oberon0.model.Variable;
 
-public class FieldSelector implements Selector {
+public class FieldSelector extends Reference {
+    private final Reference base;
     private String fieldName;
-    private Variable field;
 
-    @Before(".")
-    public FieldSelector(@Token("name") String fieldName) {
+
+    public FieldSelector(Reference base, @Before(".") @Token("name") String fieldName) {
+        super(base.getName());
+        this.base = base;
         this.fieldName = fieldName;
+    }
+
+    public Reference getBase() {
+        return base;
     }
 
     public String getFieldName() {
@@ -22,10 +30,12 @@ public class FieldSelector implements Selector {
     }
 
     public Variable getField() {
-        return field;
+        RecordType recordType = (RecordType) base.getType();
+        return recordType.fields.get(getFieldName());
     }
 
-    public void setField(Variable field) {
-        this.field = field;
+    @Override
+    public Type getType() {
+        return getField().getType();
     }
 }
