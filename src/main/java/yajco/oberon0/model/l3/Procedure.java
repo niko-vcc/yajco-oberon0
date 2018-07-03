@@ -8,7 +8,7 @@ import yajco.oberon0.model.*;
 
 import java.util.Collection;
 
-public class Procedure extends AbstractDeclaration {
+public class Procedure extends Declaration {
     private final FormalParameters parameters;
     private final Declarations declarations;
     private final StatementSequence statements;

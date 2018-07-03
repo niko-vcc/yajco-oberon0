@@ -1,7 +1,19 @@
 package yajco.oberon0.model;
 
-public interface Declaration {
-    String getName();
+public abstract class Declaration {
+    private String name;
 
-    Type getType();
+    public Declaration(String name) {
+        this.name = name;
+    }
+
+    public abstract Type getType();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

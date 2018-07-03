@@ -1,11 +1,10 @@
 package yajco.oberon0.model.l3;
 
 import yajco.annotation.Exclude;
-import yajco.oberon0.model.AbstractDeclaration;
-import yajco.oberon0.model.Storage;
+import yajco.oberon0.model.Declaration;
 import yajco.oberon0.model.Type;
 
-public class Parameter extends AbstractDeclaration implements Storage {
+public class Parameter extends Declaration {
     private boolean variable;
     private Type type;
 

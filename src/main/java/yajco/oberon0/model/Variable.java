@@ -1,6 +1,6 @@
 package yajco.oberon0.model;
 
-public class Variable extends AbstractDeclaration implements Storage {
+public class Variable extends Declaration {
     private Type type;
 
     public Variable(String name) {
