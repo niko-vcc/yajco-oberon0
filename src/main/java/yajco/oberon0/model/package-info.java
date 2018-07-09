@@ -1,6 +1,6 @@
 @Parser(
         mainNode = "yajco.oberon0.model.Module",
-        skips = {@Skip("\\s"), @Skip("//.*")},
+        skips = {@Skip("\\s"), @Skip("\\(\\*.*\\*\\)")},
         tokens = {
                 @TokenDef(name = "name", regexp = "[A-Za-z][A-Za-z0-9]*"),
                 @TokenDef(name = "integer_t", regexp = "[0-9]+")
