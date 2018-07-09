@@ -23,23 +23,63 @@ public class CCodeGenerator extends Visitor<PrintWriter> {
         writer.printf("}\n");
     }
 
+    protected void visitVariablesGroup(VariablesGroup variablesGroup, PrintWriter writer) {
+        // Visit only variables in group, not the type
+        // Type would be printed with the variables
+        if (variablesGroup != null) {
+            visitVariablesInVariablesGroup(variablesGroup.getVariables(), writer);
+        }
+    }
+
     @Override
     protected void visitVariable(Variable variable, PrintWriter writer) {
-        writer.printf(String.format("%s %s;\n", "int", variable.getName()));
+        visit(variable.getType(), writer);
+        writer.printf(String.format(" %s;\n", variable.getName()));
     }
 
     @Override
     protected void visitConstant(Constant constant, PrintWriter writer) {
-        writer.printf(String.format("%s %s = ", "const int", constant.getName()));
+        writer.print("const ");
+        visit(constant.getType(), writer);
+        writer.printf(String.format(" %s = ", constant.getName()));
         visit(constant.getExpression(), writer);
         writer.print(";\n");
     }
 
     @Override
+    protected void visitType(Type type, PrintWriter writer) {
+        if (type instanceof PrimitiveType)
+            visitPrimitiveType((PrimitiveType) type, writer);
+        else
+            super.visitType(type, writer);
+    }
+
+    @Override
+    protected void visitTypeReference(TypeReference typeReference, PrintWriter writer) {
+        if (typeReference.getRealType() instanceof PrimitiveType) {
+            visit(typeReference.getRealType(), writer);
+        } else {
+            writer.print(typeReference.getName());
+        }
+    }
+
+    protected void visitPrimitiveType(PrimitiveType type, PrintWriter writer) {
+        switch (type.getName()) {
+            case "INTEGER":
+                writer.print("int");
+                break;
+            case "BOOLEAN":
+                writer.print("bool");
+                break;
+        }
+    }
+
+    @Override
     protected void visitAssignment(Assignment assignment, PrintWriter writer) {
-        writer.printf(String.format("%s = ", assignment.getVariable().getName()));
+        visit(assignment.getReference(), writer);
+        writer.print(" = ");
         visit(assignment.getExpression(), writer);
-        writer.printf(";\n");
+        writer.print(";\n");
     }
 
     @Override

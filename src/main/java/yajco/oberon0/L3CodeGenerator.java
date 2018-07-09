@@ -48,8 +48,8 @@ public class L3CodeGenerator extends CCodeGenerator {
     protected void visitFormalParameters(FormalParameters formalParameters, PrintWriter writer) {
         for (int i = 0; i < formalParameters.size(); i++) {
             Parameter parameter = formalParameters.get(i);
-            writer.printf("%s %s%s",
-                    "int",
+            visit(parameter.getType(), writer);
+            writer.printf(" %s%s",
                     parameter.isVariable() ? "*" : "",
                     parameter.getName());
             if (i < formalParameters.size() - 1) {
@@ -84,12 +84,6 @@ public class L3CodeGenerator extends CCodeGenerator {
             }
         }
         writer.printf(");\n");
-    }
-
-    @Override
-    protected void visitAssignment(Assignment assignment, PrintWriter writer) {
-        dereferencePointer(assignment.getVariable(), writer);
-        super.visitAssignment(assignment, writer);
     }
 
     @Override
