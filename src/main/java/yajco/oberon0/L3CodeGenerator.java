@@ -14,7 +14,7 @@ public class L3CodeGenerator extends CCodeGenerator {
 
     @Override
     protected void visitModule(Module module, PrintWriter writer) {
-        writer.println("#include \"oberon.h\";\n");
+        writer.println("#include \"oberon.h\"\n");
 
         List<Procedure> procedures;
         if (module.getDeclarations() instanceof DeclarationsWithProcedures) {

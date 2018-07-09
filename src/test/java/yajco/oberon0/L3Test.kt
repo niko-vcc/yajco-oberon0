@@ -239,7 +239,7 @@ class L3Test {
                   |  WriteLn
                   |END Test.""".trimMargin()),
             equalToIgnoringWhiteSpace(
-                """#include "oberon.h";
+                """#include "oberon.h"
                   |
                   |void Multiply(int x, int y, int *z) {
                   |  *z = (x * y);
