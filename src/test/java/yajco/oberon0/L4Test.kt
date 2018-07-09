@@ -9,6 +9,8 @@ import yajco.oberon0.model.Number
 import yajco.oberon0.model.l3.ProcedureCall
 import yajco.oberon0.model.l4.*
 import yajco.oberon0.model.parser.LALRModuleParser
+import java.io.PrintWriter
+import java.io.StringWriter
 
 class L4Test {
     private var parser: LALRModuleParser? = null
@@ -174,5 +176,84 @@ class L4Test {
         assertThat(L3NamesResolver.resolve(module), equalTo(emptyList()))
         val errors = L4TypeChecker.check(module)
         assertThat(errors.size, equalTo(2))
+    }
+
+    @Test
+    fun translateArrayDefinition() {
+        assertThat(translate(
+                """MODULE Test;
+                  |  VAR a: ARRAY 10 OF INTEGER;
+                  |END Test.""".trimMargin()),
+                equalToIgnoringWhiteSpace(
+                """#include "oberon.h"
+                  |
+                  |void main() {
+                  |  int a[10];
+                  |}""".trimMargin()))
+    }
+
+    @Test
+    fun translateArrayIndexing() {
+        assertThat(translate(
+                """MODULE Test;
+                  |  VAR a: ARRAY 10 OF INTEGER;
+                  |BEGIN
+                  |  a[1] := 5
+                  |END Test.""".trimMargin()),
+                equalToIgnoringWhiteSpace(
+                        """#include "oberon.h"
+                  |
+                  |void main() {
+                  |  int a[10];
+                  |  a[1 - 1] = 5;
+                  |}""".trimMargin()))
+    }
+
+    @Test
+    fun translateRecordDefinition() {
+        assertThat(translate(
+                """MODULE Test;
+                  |  VAR r: RECORD a, b: INTEGER END;
+                  |END Test.""".trimMargin()),
+                equalToIgnoringWhiteSpace(
+                """#include "oberon.h"
+                  |
+                  |void main() {
+                  |  struct {
+                  |     int a;
+                  |     int b;
+                  |   } r;
+                  |}""".trimMargin()))
+    }
+
+    @Test
+    fun translateRecordIndexing() {
+        assertThat(translate(
+                """MODULE Test;
+                  |  VAR r: RECORD a, b: INTEGER END;
+                  |BEGIN
+                  |  r.a := 1;
+                  |  r.b := 2
+                  |END Test.""".trimMargin()),
+                equalToIgnoringWhiteSpace(
+                """#include "oberon.h"
+                  |
+                  |void main() {
+                  |  struct {
+                  |     int a;
+                  |     int b;
+                  |   } r;
+                  |   r.a = 1;
+                  |   r.b = 2;
+                  |}""".trimMargin()))
+    }
+
+    private fun translate(input: String): String {
+        val module = parser!!.parse(input)
+        L3NamesResolver.resolve(module)
+        L3Transformation.liftProcedures(module)
+        val writer = StringWriter()
+        L4CodeGenerator.generate(module, PrintWriter(writer))
+        return writer.toString()
     }
 }
