@@ -3,6 +3,7 @@ package yajco.oberon0;
 import org.junit.Before;
 import org.junit.Test;
 import yajco.oberon0.model.*;
+import yajco.oberon0.model.Module;
 import yajco.oberon0.model.Number;
 import yajco.oberon0.model.operators.*;
 import yajco.oberon0.model.parser.LALRModuleParser;

@@ -2,6 +2,7 @@ package yajco.oberon0;
 
 import yajco.annotation.Exclude;
 import yajco.oberon0.model.*;
+import yajco.oberon0.model.Module;
 import yajco.oberon0.model.operators.*;
 import yajco.oberon0.model.visitor.Visitor;
 
