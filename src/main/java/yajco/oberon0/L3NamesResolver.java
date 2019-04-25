@@ -1,6 +1,7 @@
 package yajco.oberon0;
 
 import yajco.oberon0.model.*;
+import yajco.oberon0.model.Module;
 import yajco.oberon0.model.l3.Parameter;
 import yajco.oberon0.model.l3.Procedure;
 import yajco.oberon0.model.l3.ProcedureCall;
