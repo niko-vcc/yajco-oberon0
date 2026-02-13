@@ -1,6 +1,6 @@
 # Important notes
 
-1. Code accompanies the paper [](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8327233)
+1. Code accompanies the paper [Development of Oberon-0 using YAJCo](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8327233)
 2. Forked from https://git.kpi.fei.tuke.sk/sergej.chodarev/yajco-oberon0
 3. requires exactly openjdk-11 (see dockerfile for a running example)
 
