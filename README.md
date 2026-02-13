@@ -1,3 +1,31 @@
+# Important notes
+
+1. Code accompanies the paper [](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8327233)
+2. Forked from https://git.kpi.fei.tuke.sk/sergej.chodarev/yajco-oberon0
+3. requires exactly openjdk-11 (see dockerfile for a running example)
+
+## Docker file
+
+The following dockerfile builds and runs the Oberon0 code
+
+```
+FROM ubuntu:24.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git maven && apt-get clean
+
+WORKDIR /
+
+RUN git clone https://github.com/niko-vcc/yajco-oberon0 yajco
+
+WORKDIR /yajco
+
+RUN mvn compile
+```
+
+# Original README
+
 Implementation of Oberon-0 using YAJCo
 ======================================
 
